@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="kevin.practise.example.MainActivity">
+    tools:context="kevin.practise.example.ui.main.MainActivity">
 
     <TextView
+        android:id="@+id/tv_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"
@@ -15,4 +16,59 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-</android.support.constraint.ConstraintLayout>
+    <Button
+        android:id="@+id/btn_retrofit_get"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="get一般請求（Retrofit）" />
+
+    <Button
+        android:id="@+id/btn_retrofit_get_gson"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_retrofit_get"
+        android:layout_centerHorizontal="true"
+        android:text="get一般請求（gson）" />
+
+    <Button
+        android:id="@+id/btn_retrofit_get_dym"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_retrofit_get_gson"
+        android:layout_centerHorizontal="true"
+        android:text="get動態參數" />
+
+    <Button
+        android:id="@+id/btn_retrofit_parameter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_retrofit_get_dym"
+        android:layout_centerHorizontal="true"
+        android:text="Get參數請求" />
+
+    <Button
+        android:id="@+id/btn_retrofit_combine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_retrofit_parameter"
+        android:layout_centerHorizontal="true"
+        android:text="Get參數拼接" />
+
+    <Button
+        android:id="@+id/btn_retrofit_post"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_retrofit_combine"
+        android:layout_centerHorizontal="true"
+        android:text="POST" />
+
+    <Button
+        android:id="@+id/btn_retrofit_rxjava"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_retrofit_post"
+        android:layout_centerHorizontal="true"
+        android:text="rxjava" />
+
+</android.widget.RelativeLayout>
