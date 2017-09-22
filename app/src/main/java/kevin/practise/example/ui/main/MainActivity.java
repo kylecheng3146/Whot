@@ -1,7 +1,6 @@
 package kevin.practise.example.ui.main;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
+import butterknife.OnClick;
 import kevin.practise.example.R;
 import kevin.practise.example.api.ApiServices;
 import kevin.practise.example.base.BaseActivity;
@@ -23,10 +22,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener {
+import static android.util.Log.i;
+
+public class MainActivity extends BaseActivity implements MainView,View.OnClickListener {
 
     Retrofit retrofit;
     ApiServices api;
@@ -47,11 +47,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R.id.btn_retrofit_rxjava)
     Button btnRetrofitRxjava;
 
+    MainPresenter presenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
 
         btnRetrofitGet.setOnClickListener(this);
         btnRetrofitGetGson.setOnClickListener(this);
@@ -59,7 +60,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btnRetrofitParameter.setOnClickListener(this);
         btnRetrofitCombine.setOnClickListener(this);
         btnRetrofitPost.setOnClickListener(this);
-        btnRetrofitRxjava.setOnClickListener(this);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.i("TAG", "@@@@@@@@");
+                        i("TAG", "@@@@@@@@");
 
                     }
                 });
@@ -113,7 +113,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                     @Override
                     public void onFailure(Call<GankBean> call, Throwable t) {
-                        Log.i("TAG", "@@@@@@@@");
+                        i("TAG", "@@@@@@@@");
 
                     }
                 });
@@ -137,7 +137,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                     @Override
                     public void onFailure(Call<WeatherDataBean> call, Throwable t) {
-                        Log.i("TAG", "@@@@@@@@");
+                        i("TAG", "@@@@@@@@");
 
                     }
                 });
@@ -179,7 +179,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                     @Override
                     public void onFailure(Call<WeatherDataBean> call, Throwable t) {
-                        Log.i("TAG", "@@@@@");
+                        i("TAG", "@@@@@");
                     }
                 });
                 break;
@@ -199,9 +199,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 api.getNotificationCount("api/Android/NotifiListCount", hashmap).enqueue(new Callback<NotificationCountBean>() {
                     @Override
                     public void onResponse(Call<NotificationCountBean> call, Response<NotificationCountBean> response) {
-                        Log.i("TAG", String.valueOf(response.body().getDataTable().get(0).getTotal()));
+                        i("TAG", String.valueOf(response.body().getDataTable().get(0).getTotal()));
                         for (NotificationCountBean.DataTableBean bean : response.body().getDataTable()) {
-                            Log.i("TAG", String.valueOf(bean.getTotal()));
+                            i("TAG", String.valueOf(bean.getTotal()));
                         }
                     }
 
@@ -211,15 +211,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     }
                 });
                 break;
-            case R.id.btn_retrofit_rxjava:
-                retrofit = new Retrofit.Builder()
-                        .baseUrl("baseUrl")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                        .build();
-                api = retrofit.create(ApiServices.class);
-
-                break;
         }
+    }
+
+    @Override
+    public void getNotificationData(NotificationCountBean bean) {
+        tvResult.setText(bean.getResponse());
+    }
+
+    @OnClick(R.id.btn_retrofit_rxjava)
+    @Override
+    public void onRxJavaClick() {
+        HashMap<String, String> hashmap = new HashMap<>();
+        hashmap.put("IMEI", "355693063092533");
+        hashmap.put("CusID", "0005967");
+        hashmap.put("TimeStamp", "1497235728");
+        hashmap.put("Signature", "ce42ccc9a6da004321c8f4dab7632c6b849245669634c155a9497afdc6fdfe11");
+        hashmap.put("AppID", "20170518A");
+        presenter = new MainPresenter(this);
+        presenter.loadDataByRetrofitRxjava(hashmap);
     }
 }
