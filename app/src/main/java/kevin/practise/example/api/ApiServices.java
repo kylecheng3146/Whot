@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kevin.practise.example.data.GankBean;
-import kevin.practise.example.data.NotificationCountBean;
+import kevin.practise.example.data.MainModel;
 import kevin.practise.example.data.WeatherDataBean;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -38,9 +38,9 @@ public interface ApiServices {
     Call<WeatherDataBean> getWeatherWithParameters(@QueryMap Map<String, String> params);
 
     @POST("{page}")
-    Call<NotificationCountBean> getNotificationCount(@Path("page") String page, @Body HashMap hashMap);
+    Call<MainModel> getNotificationCount(@Path("page") String page, @Body HashMap hashMap);
 
     @POST("{page}")
-    Observable<NotificationCountBean> getNotificationCountWithRxJava(@Path("page") String page, @Body HashMap hashMap);
+    Observable<MainModel> getNotificationCountWithRxJava(@Path("page") String page, @Body HashMap hashMap);
 
 }

@@ -3,8 +3,11 @@ package kevin.practise.example.ui.main;
 import java.util.HashMap;
 
 import kevin.practise.example.base.BasePresenter;
-import kevin.practise.example.data.NotificationCountBean;
+import kevin.practise.example.data.MainModel;
 import kevin.practise.example.http.RxManager;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -13,27 +16,28 @@ import rx.schedulers.Schedulers;
  * Created by kevin on 21/09/2017.
  */
 
-public class MainPresenter extends BasePresenter<MainView> {
+class MainPresenter extends BasePresenter<MainView> {
 
-    public MainPresenter(MainView view) {
+    MainPresenter(MainView view) {
         attachView(view);
     }
 
     /**
      * RxJava範例
      * */
-    public void loadDataByRetrofitRxjava(HashMap hashMap) {
+    void loadDataByRetrofitRxjava(HashMap hashMap) {
         mvpView.showLoading();
+        //call api method with rxjava example
         apiServices.getNotificationCountWithRxJava("/api/Android/NotifiListCount",hashMap)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new RxManager<NotificationCountBean>() {
+                .subscribe(new RxManager<MainModel>() {
             @Override
-            public void _onNext(NotificationCountBean bean) {
+            public void _onNext(MainModel bean) {
                 mvpView.getNotificationData(bean);
-                mvpView.showMessage(bean.getResponse());
+                mvpView.showMessage(bean.isResult()?bean.getResponse(): (String) bean.getErrorMessage());
             }
 
             @Override
@@ -45,6 +49,28 @@ public class MainPresenter extends BasePresenter<MainView> {
             public void _onCompleted() {
                 mvpView.hideLoading();
                 detachView();
+            }
+        });
+    }
+
+    /**
+     * Retrofit post example
+     * */
+    void loadDataByRetrofitPost(HashMap hashMap) {
+        mvpView.showLoading();
+        //call api method
+        apiServices.getNotificationCount("api/Android/NotifiListCount", hashMap).enqueue(new Callback<MainModel>() {
+            @Override
+            public void onResponse(Call<MainModel> call, Response<MainModel> response) {
+                mvpView.getRetrofitPost(response.body());
+                mvpView.showMessage(response.body().isResult()?response.body().getResponse(): (String) response.body().getErrorMessage());
+                mvpView.hideLoading();
+            }
+
+            @Override
+            public void onFailure(Call<MainModel> call, Throwable t) {
+                mvpView.showMessage(t.getMessage());
+                mvpView.hideLoading();
             }
         });
     }

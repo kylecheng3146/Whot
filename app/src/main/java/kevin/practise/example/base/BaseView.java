@@ -11,4 +11,6 @@ public interface BaseView {
     void hideLoading();
 
     void showMessage(String message);
+
+    void onRefreshView();
 }

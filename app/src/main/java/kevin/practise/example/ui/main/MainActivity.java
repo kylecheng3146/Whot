@@ -15,7 +15,7 @@ import kevin.practise.example.R;
 import kevin.practise.example.api.ApiServices;
 import kevin.practise.example.base.BaseActivity;
 import kevin.practise.example.data.GankBean;
-import kevin.practise.example.data.NotificationCountBean;
+import kevin.practise.example.data.MainModel;
 import kevin.practise.example.data.WeatherDataBean;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -30,22 +30,14 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
 
     Retrofit retrofit;
     ApiServices api;
-    @BindView(R.id.tv_result)
-    TextView tvResult;
-    @BindView(R.id.btn_retrofit_get)
-    Button btnRetrofitGet;
-    @BindView(R.id.btn_retrofit_get_gson)
-    Button btnRetrofitGetGson;
-    @BindView(R.id.btn_retrofit_get_dym)
-    Button btnRetrofitGetDym;
-    @BindView(R.id.btn_retrofit_parameter)
-    Button btnRetrofitParameter;
-    @BindView(R.id.btn_retrofit_combine)
-    Button btnRetrofitCombine;
-    @BindView(R.id.btn_retrofit_post)
-    Button btnRetrofitPost;
-    @BindView(R.id.btn_retrofit_rxjava)
-    Button btnRetrofitRxjava;
+    @BindView(R.id.tv_result) TextView tvResult;
+    @BindView(R.id.btn_retrofit_get) Button btnRetrofitGet;
+    @BindView(R.id.btn_retrofit_get_gson) Button btnRetrofitGetGson;
+    @BindView(R.id.btn_retrofit_get_dym) Button btnRetrofitGetDym;
+    @BindView(R.id.btn_retrofit_parameter) Button btnRetrofitParameter;
+    @BindView(R.id.btn_retrofit_combine) Button btnRetrofitCombine;
+    @BindView(R.id.btn_retrofit_post) Button btnRetrofitPost;
+    @BindView(R.id.btn_retrofit_rxjava) Button btnRetrofitRxjava;
 
     MainPresenter presenter;
 
@@ -59,7 +51,6 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
         btnRetrofitGetDym.setOnClickListener(this);
         btnRetrofitParameter.setOnClickListener(this);
         btnRetrofitCombine.setOnClickListener(this);
-        btnRetrofitPost.setOnClickListener(this);
     }
 
     @Override
@@ -67,11 +58,13 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
 
         switch (view.getId()) {
             case R.id.btn_retrofit_get:
+                //init retrofit
                 retrofit = new Retrofit.Builder()
                         .baseUrl("http://gank.io/")
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
                 api = retrofit.create(ApiServices.class);
+                //call api method
                 Call<ResponseBody> call = api.getAndroidInfo();
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
@@ -132,7 +125,7 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
                     @Override
                     public void onResponse(Call<WeatherDataBean> call, Response<WeatherDataBean> response) {
                         String info = response.body().getResult().getData().getRealtime().getWeather().getInfo();
-                        tvResult.setText("深圳天气：" + info);
+                        tvResult.setText("深圳天氣：" + info);
                     }
 
                     @Override
@@ -183,40 +176,17 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
                     }
                 });
                 break;
-            case R.id.btn_retrofit_post:
-                retrofit = new Retrofit.Builder()
-                        .baseUrl("http://211.22.242.13:8164")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-                api = retrofit.create(ApiServices.class);
-
-                HashMap<String, String> hashmap = new HashMap<>();
-                hashmap.put("IMEI", "355693063092533");
-                hashmap.put("CusID", "0005967");
-                hashmap.put("TimeStamp", "1497235728");
-                hashmap.put("Signature", "ce42ccc9a6da004321c8f4dab7632c6b849245669634c155a9497afdc6fdfe11");
-                hashmap.put("AppID", "20170518A");
-                api.getNotificationCount("api/Android/NotifiListCount", hashmap).enqueue(new Callback<NotificationCountBean>() {
-                    @Override
-                    public void onResponse(Call<NotificationCountBean> call, Response<NotificationCountBean> response) {
-                        i("TAG", String.valueOf(response.body().getDataTable().get(0).getTotal()));
-                        for (NotificationCountBean.DataTableBean bean : response.body().getDataTable()) {
-                            i("TAG", String.valueOf(bean.getTotal()));
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<NotificationCountBean> call, Throwable t) {
-
-                    }
-                });
-                break;
         }
     }
 
     @Override
-    public void getNotificationData(NotificationCountBean bean) {
+    public void getNotificationData(MainModel bean) {
         tvResult.setText(bean.getResponse());
+    }
+
+    @Override
+    public void getRetrofitPost(MainModel bean) {
+        tvResult.setText(bean.getSqlDetail());
     }
 
     @OnClick(R.id.btn_retrofit_rxjava)
@@ -230,5 +200,23 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
         hashmap.put("AppID", "20170518A");
         presenter = new MainPresenter(this);
         presenter.loadDataByRetrofitRxjava(hashmap);
+    }
+
+    @OnClick(R.id.btn_retrofit_post)
+    @Override
+    public void onrRetrofitPost() {
+        HashMap<String, String> hashmap = new HashMap<>();
+        hashmap.put("IMEI", "355693063092533");
+        hashmap.put("CusID", "0005967");
+        hashmap.put("TimeStamp", "1497235728");
+        hashmap.put("Signature", "ce42ccc9a6da004321c8f4dab7632c6b849245669634c155a9497afdc6fdfe11");
+        hashmap.put("AppID", "20170518A");
+        presenter = new MainPresenter(this);
+        presenter.loadDataByRetrofitPost(hashmap);
+    }
+
+    @Override
+    public void onRefreshView() {
+
     }
 }
