@@ -1,9 +1,12 @@
 package kevin.practise.example.ui.main;
 
+import android.util.Log;
+
 import java.util.HashMap;
 
 import kevin.practise.example.base.BasePresenter;
 import kevin.practise.example.data.MainModel;
+import kevin.practise.example.data.WeatherDataBean;
 import kevin.practise.example.http.RxManager;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -12,7 +15,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * 處理 main業務邏輯
+ * 處理 main 業務邏輯
  * Created by kevin on 21/09/2017.
  */
 
@@ -25,7 +28,7 @@ class MainPresenter extends BasePresenter<MainView> {
     /**
      * RxJava範例
      * */
-    void loadDataByRetrofitRxjava(HashMap hashMap) {
+    void loadDataByRetrofitRxjava(HashMap<String, String> hashMap) {
         mvpView.showLoading();
         //call api method with rxjava example
         apiServices.getNotificationCountWithRxJava("/api/Android/NotifiListCount",hashMap)
@@ -56,7 +59,7 @@ class MainPresenter extends BasePresenter<MainView> {
     /**
      * Retrofit post example
      * */
-    void loadDataByRetrofitPost(HashMap hashMap) {
+    void loadDataByRetrofitPost(HashMap<String, String> hashMap) {
         mvpView.showLoading();
         //call api method
         apiServices.getNotificationCount("api/Android/NotifiListCount", hashMap).enqueue(new Callback<MainModel>() {
@@ -73,5 +76,35 @@ class MainPresenter extends BasePresenter<MainView> {
                 mvpView.hideLoading();
             }
         });
+    }
+
+    /**
+     * Retrofit post example
+     * */
+    void loadDataByRetrofitCombine(HashMap<String, String> hashMap) {
+        mvpView.showLoading();
+        //轉換URL給定完整的URL網址
+        apiServices.getWeatherWithParameters("http://op.juhe.cn/onebox/weather/query?",hashMap)
+            .subscribeOn(Schedulers.io())
+            .unsubscribeOn(Schedulers.io())
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new RxManager<WeatherDataBean>() {
+
+                @Override
+                public void _onNext(WeatherDataBean model) {
+                    Log.i("TAG", "@@@@@@@@@@@");
+                }
+
+                @Override
+                public void _onError(String msg) {
+                    mvpView.showMessage(msg);
+                }
+
+                @Override
+                public void _onCompleted() {
+                    mvpView.showMessage("@@@@@@@@@@@@");
+                }
+           });
     }
 }

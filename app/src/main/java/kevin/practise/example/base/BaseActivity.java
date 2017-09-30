@@ -13,7 +13,7 @@ import butterknife.ButterKnife;
 import kevin.practise.example.util.CommonUtils;
 
 /**
- * Created by sapido on 21/09/2017.
+ * Created by Kevin on 21/09/2017.
  */
 
 public class BaseActivity extends AppCompatActivity implements BaseView {
@@ -75,5 +75,10 @@ public class BaseActivity extends AppCompatActivity implements BaseView {
     @Override
     public void showMessage(String message) {
         Toast.makeText(mActivity, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRefreshView() {
+
     }
 }

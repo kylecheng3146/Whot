@@ -1,1 +1,2 @@
-PractiseExample
+RxJava + Retrofit + GSON + MVP pattern
+

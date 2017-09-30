@@ -1,19 +1,20 @@
 package kevin.practise.example.ui.main;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import kevin.practise.example.R;
 import kevin.practise.example.api.ApiServices;
 import kevin.practise.example.base.BaseActivity;
+import kevin.practise.example.data.AntBean;
 import kevin.practise.example.data.GankBean;
 import kevin.practise.example.data.MainModel;
 import kevin.practise.example.data.WeatherDataBean;
@@ -28,8 +29,7 @@ import static android.util.Log.i;
 
 public class MainActivity extends BaseActivity implements MainView,View.OnClickListener {
 
-    Retrofit retrofit;
-    ApiServices api;
+
     @BindView(R.id.tv_result) TextView tvResult;
     @BindView(R.id.btn_retrofit_get) Button btnRetrofitGet;
     @BindView(R.id.btn_retrofit_get_gson) Button btnRetrofitGetGson;
@@ -39,7 +39,7 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
     @BindView(R.id.btn_retrofit_post) Button btnRetrofitPost;
     @BindView(R.id.btn_retrofit_rxjava) Button btnRetrofitRxjava;
 
-    MainPresenter presenter;
+    private MainPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,54 +58,49 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
 
         switch (view.getId()) {
             case R.id.btn_retrofit_get:
-                //init retrofit
-                retrofit = new Retrofit.Builder()
+                Retrofit retrofit;
+                ApiServices api;
+
+                Retrofit retrofit1 = new Retrofit.Builder()
                         .baseUrl("http://gank.io/")
-                        .addConverterFactory(GsonConverterFactory.create())
                         .build();
-                api = retrofit.create(ApiServices.class);
-                //call api method
-                Call<ResponseBody> call = api.getAndroidInfo();
+
+                ApiServices api1 = retrofit1.create(ApiServices.class);
+                Call<ResponseBody> call = api1.getAndroidInfo();
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         try {
                             String result = response.body().string();
+                            Log.i("@@@", result);
                             tvResult.setText(result);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }
-
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        i("TAG", "@@@@@@@@");
-
+                        Log.i("TAG", "@@@@");
                     }
                 });
 
                 break;
             case R.id.btn_retrofit_get_gson:
+                retrofit = new Retrofit.Builder()
+                        .baseUrl("https://script.google.com/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
                 api = retrofit.create(ApiServices.class);
-                Call<GankBean> call_gson = api.getAndroidInfoWithGson();
-                call_gson.enqueue(new Callback<GankBean>() {
+                Call<AntBean> call_gson = api.getAntInfoWithGson();
+                call_gson.enqueue(new Callback<AntBean>() {
                     @Override
-                    public void onResponse(Call<GankBean> call, Response<GankBean> response) {
-                        GankBean.ResultsBean bean = response.body().getResults().get(0);
-                        tvResult.setText(
-                                "_id:" + bean.get_id() + "\n"
-                                        + "createdAt：" + bean.getCreatedAt() + "\n"
-                                        + "desc：" + bean.getDesc() + "\n"
-                                        + "images:" + bean.getImages() + "\n"
-                                        + "publishedAt:" + bean.getPublishedAt() + "\n"
-                                        + "source" + bean.getSource() + "\n"
-                                        + "type:" + bean.getType() + "\n"
-                                        + "url: " + bean.getUrl() + "\n"
-                                        + "who:" + bean.getWho());
+                    public void onResponse(Call<AntBean> call, Response<AntBean> response) {
+                        Log.i("TAG",response.body().getName() );
+                        tvResult.setText(response.body().getName());
                     }
 
                     @Override
-                    public void onFailure(Call<GankBean> call, Throwable t) {
+                    public void onFailure(Call<AntBean> call, Throwable t) {
                         i("TAG", "@@@@@@@@");
 
                     }
@@ -154,28 +149,6 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
                     }
                 });
                 break;
-            case R.id.btn_retrofit_combine:
-                retrofit = new Retrofit.Builder()
-                        .baseUrl("http://op.juhe.cn/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-                api = retrofit.create(ApiServices.class);
-
-                Map<String, String> params = new HashMap<>();
-                params.put("cityname", "深圳");
-                params.put("key", "4ea58de8a7573377cec0046f5e2469d5");
-                api.getWeatherWithParameters(params).enqueue(new Callback<WeatherDataBean>() {
-                    @Override
-                    public void onResponse(Call<WeatherDataBean> call, Response<WeatherDataBean> response) {
-                        tvResult.setText(response.body().getResult().getData().getRealtime().getCity_name());
-                    }
-
-                    @Override
-                    public void onFailure(Call<WeatherDataBean> call, Throwable t) {
-                        i("TAG", "@@@@@");
-                    }
-                });
-                break;
         }
     }
 
@@ -204,7 +177,7 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
 
     @OnClick(R.id.btn_retrofit_post)
     @Override
-    public void onrRetrofitPost() {
+    public void onRetrofitPost() {
         HashMap<String, String> hashmap = new HashMap<>();
         hashmap.put("IMEI", "355693063092533");
         hashmap.put("CusID", "0005967");
@@ -213,6 +186,16 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
         hashmap.put("AppID", "20170518A");
         presenter = new MainPresenter(this);
         presenter.loadDataByRetrofitPost(hashmap);
+    }
+
+    @OnClick(R.id.btn_retrofit_combine)
+    @Override
+    public void onRetrofitCombine() {
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("cityname", "深圳");
+        hashMap.put("key", "4ea58de8a7573377cec0046f5e2469d5");
+        presenter = new MainPresenter(this);
+        presenter.loadDataByRetrofitCombine(hashMap);
     }
 
     @Override
