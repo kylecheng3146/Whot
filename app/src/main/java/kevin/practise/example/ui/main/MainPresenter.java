@@ -1,18 +1,16 @@
 package kevin.practise.example.ui.main;
 
-import android.util.Log;
-
 import java.util.HashMap;
+import java.util.Map;
 
 import kevin.practise.example.base.BasePresenter;
 import kevin.practise.example.data.MainModel;
-import kevin.practise.example.data.WeatherDataBean;
+import kevin.practise.example.data.WeatherDataModel;
 import kevin.practise.example.http.RxManager;
+import kevin.practise.example.http.RxSubscriber;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * 處理 main 業務邏輯
@@ -28,19 +26,14 @@ class MainPresenter extends BasePresenter<MainView> {
     /**
      * RxJava範例
      * */
-    void loadDataByRetrofitRxjava(HashMap<String, String> hashMap) {
+    void loadDataByRetrofitRxJava(HashMap<String, String> hashMap) {
         mvpView.showLoading();
         //call api method with rxjava example
-        apiServices.getNotificationCountWithRxJava("/api/Android/NotifiListCount",hashMap)
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new RxManager<MainModel>() {
+        RxSubscriber.getInstance().doSubscribe(apiServices.getNotificationCountWithRxJava("/api/Android/NotifiListCount", hashMap), new RxManager<MainModel>() {
             @Override
-            public void _onNext(MainModel bean) {
-                mvpView.getNotificationData(bean);
-                mvpView.showMessage(bean.isResult()?bean.getResponse(): (String) bean.getErrorMessage());
+            public void _onNext(MainModel model) {
+                mvpView.getNotificationData(model);
+                mvpView.showMessage(model.isResult()?model.getResponse(): (String) model.getErrorMessage());
             }
 
             @Override
@@ -81,30 +74,25 @@ class MainPresenter extends BasePresenter<MainView> {
     /**
      * Retrofit post example
      * */
-    void loadDataByRetrofitCombine(HashMap<String, String> hashMap) {
+    void loadDataByRetrofitCombine(Map<String,String> hashMap) {
         mvpView.showLoading();
         //轉換URL給定完整的URL網址
-        apiServices.getWeatherWithParameters("http://op.juhe.cn/onebox/weather/query?",hashMap)
-            .subscribeOn(Schedulers.io())
-            .unsubscribeOn(Schedulers.io())
-            .subscribeOn(AndroidSchedulers.mainThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new RxManager<WeatherDataBean>() {
+        RxSubscriber.getInstance().doSubscribe(apiServices.getWeatherWithParameters("http://op.juhe.cn/onebox/weather/query?", hashMap), new RxManager<WeatherDataModel>() {
+            @Override
+            public void _onNext(WeatherDataModel model) {
+                mvpView.showMessage(String.valueOf(model.getResult().getData().getDate()));
+            }
 
-                @Override
-                public void _onNext(WeatherDataBean model) {
-                    Log.i("TAG", "@@@@@@@@@@@");
-                }
+            @Override
+            public void _onError(String msg) {
+                mvpView.showMessage(msg);
+            }
 
-                @Override
-                public void _onError(String msg) {
-                    mvpView.showMessage(msg);
-                }
-
-                @Override
-                public void _onCompleted() {
-                    mvpView.showMessage("@@@@@@@@@@@@");
-                }
-           });
+            @Override
+            public void _onCompleted() {
+                mvpView.hideLoading();
+                detachView();
+            }
+        });
     }
 }

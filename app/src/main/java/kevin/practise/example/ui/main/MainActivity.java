@@ -8,16 +8,17 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import kevin.practise.example.R;
 import kevin.practise.example.api.ApiServices;
 import kevin.practise.example.base.BaseActivity;
-import kevin.practise.example.data.AntBean;
-import kevin.practise.example.data.GankBean;
+import kevin.practise.example.data.AntModel;
+import kevin.practise.example.data.GankModel;
 import kevin.practise.example.data.MainModel;
-import kevin.practise.example.data.WeatherDataBean;
+import kevin.practise.example.data.WeatherDataModel;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,6 +41,8 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
     @BindView(R.id.btn_retrofit_rxjava) Button btnRetrofitRxjava;
 
     private MainPresenter presenter;
+    HashMap<String, String> hashMap = new HashMap<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,6 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
         btnRetrofitGetGson.setOnClickListener(this);
         btnRetrofitGetDym.setOnClickListener(this);
         btnRetrofitParameter.setOnClickListener(this);
-        btnRetrofitCombine.setOnClickListener(this);
     }
 
     @Override
@@ -91,16 +93,16 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
                 api = retrofit.create(ApiServices.class);
-                Call<AntBean> call_gson = api.getAntInfoWithGson();
-                call_gson.enqueue(new Callback<AntBean>() {
+                Call<AntModel> call_gson = api.getAntInfoWithGson();
+                call_gson.enqueue(new Callback<AntModel>() {
                     @Override
-                    public void onResponse(Call<AntBean> call, Response<AntBean> response) {
+                    public void onResponse(Call<AntModel> call, Response<AntModel> response) {
                         Log.i("TAG",response.body().getName() );
                         tvResult.setText(response.body().getName());
                     }
 
                     @Override
-                    public void onFailure(Call<AntBean> call, Throwable t) {
+                    public void onFailure(Call<AntModel> call, Throwable t) {
                         i("TAG", "@@@@@@@@");
 
                     }
@@ -114,17 +116,17 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
                         .build();
                 api = retrofit.create(ApiServices.class);
 
-                Call<WeatherDataBean> call_dym = api.getWeather("4ea58de8a7573377cec0046f5e2469d5");
+                Call<WeatherDataModel> call_dym = api.getWeather("4ea58de8a7573377cec0046f5e2469d5");
                 //异步
-                call_dym.enqueue(new Callback<WeatherDataBean>() {
+                call_dym.enqueue(new Callback<WeatherDataModel>() {
                     @Override
-                    public void onResponse(Call<WeatherDataBean> call, Response<WeatherDataBean> response) {
+                    public void onResponse(Call<WeatherDataModel> call, Response<WeatherDataModel> response) {
                         String info = response.body().getResult().getData().getRealtime().getWeather().getInfo();
                         tvResult.setText("深圳天氣：" + info);
                     }
 
                     @Override
-                    public void onFailure(Call<WeatherDataBean> call, Throwable t) {
+                    public void onFailure(Call<WeatherDataModel> call, Throwable t) {
                         i("TAG", "@@@@@@@@");
 
                     }
@@ -137,14 +139,14 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
                         .build();
                 api = retrofit.create(ApiServices.class);
 
-                api.getAndroidInfoWithParameters(1).enqueue(new Callback<GankBean>() {
+                api.getAndroidInfoWithParameters(1).enqueue(new Callback<GankModel>() {
                     @Override
-                    public void onResponse(Call<GankBean> call, Response<GankBean> response) {
+                    public void onResponse(Call<GankModel> call, Response<GankModel> response) {
                         tvResult.setText(response.body().getResults().get(0).getDesc());
                     }
 
                     @Override
-                    public void onFailure(Call<GankBean> call, Throwable t) {
+                    public void onFailure(Call<GankModel> call, Throwable t) {
 
                     }
                 });
@@ -165,37 +167,38 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
     @OnClick(R.id.btn_retrofit_rxjava)
     @Override
     public void onRxJavaClick() {
-        HashMap<String, String> hashmap = new HashMap<>();
-        hashmap.put("IMEI", "355693063092533");
-        hashmap.put("CusID", "0005967");
-        hashmap.put("TimeStamp", "1497235728");
-        hashmap.put("Signature", "ce42ccc9a6da004321c8f4dab7632c6b849245669634c155a9497afdc6fdfe11");
-        hashmap.put("AppID", "20170518A");
+        hashMap.put("IMEI", "355693063092533");
+        hashMap.put("CusID", "0005967");
+        hashMap.put("TimeStamp", "1497235728");
+        hashMap.put("Signature", "ce42ccc9a6da004321c8f4dab7632c6b849245669634c155a9497afdc6fdfe11");
+        hashMap.put("AppID", "20170518A");
         presenter = new MainPresenter(this);
-        presenter.loadDataByRetrofitRxjava(hashmap);
+        presenter.loadDataByRetrofitRxJava(hashMap);
+        hashMap.clear();
     }
 
     @OnClick(R.id.btn_retrofit_post)
     @Override
     public void onRetrofitPost() {
-        HashMap<String, String> hashmap = new HashMap<>();
-        hashmap.put("IMEI", "355693063092533");
-        hashmap.put("CusID", "0005967");
-        hashmap.put("TimeStamp", "1497235728");
-        hashmap.put("Signature", "ce42ccc9a6da004321c8f4dab7632c6b849245669634c155a9497afdc6fdfe11");
-        hashmap.put("AppID", "20170518A");
+        hashMap.put("IMEI", "355693063092533");
+        hashMap.put("CusID", "0005967");
+        hashMap.put("TimeStamp", "1497235728");
+        hashMap.put("Signature", "ce42ccc9a6da004321c8f4dab7632c6b849245669634c155a9497afdc6fdfe11");
+        hashMap.put("AppID", "20170518A");
         presenter = new MainPresenter(this);
-        presenter.loadDataByRetrofitPost(hashmap);
+        presenter.loadDataByRetrofitPost(hashMap);
+        hashMap.clear();
     }
 
     @OnClick(R.id.btn_retrofit_combine)
     @Override
     public void onRetrofitCombine() {
-        HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("cityname", "深圳");
-        hashMap.put("key", "4ea58de8a7573377cec0046f5e2469d5");
+        Map<String, String> map = new HashMap<>();
+        map.put("cityname", "深圳");
+        map.put("key", "4ea58de8a7573377cec0046f5e2469d5");
         presenter = new MainPresenter(this);
-        presenter.loadDataByRetrofitCombine(hashMap);
+        presenter.loadDataByRetrofitCombine(map);
+        hashMap.clear();
     }
 
     @Override

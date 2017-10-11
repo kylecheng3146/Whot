@@ -6,7 +6,7 @@ import java.util.List;
  * Created by sapido on 21/09/2017.
  */
 
-public class GankBean {
+public class GankModel {
 
 
     /**

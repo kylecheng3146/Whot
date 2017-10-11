@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 import kevin.practise.example.R;
 
-/**
+/** utility method everyone can use it
  * Created by sapido on 22/09/2017.
  */
 

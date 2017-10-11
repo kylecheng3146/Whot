@@ -3,10 +3,10 @@ package kevin.practise.example.api;
 import java.util.HashMap;
 import java.util.Map;
 
-import kevin.practise.example.data.AntBean;
-import kevin.practise.example.data.GankBean;
+import kevin.practise.example.data.AntModel;
+import kevin.practise.example.data.GankModel;
 import kevin.practise.example.data.MainModel;
-import kevin.practise.example.data.WeatherDataBean;
+import kevin.practise.example.data.WeatherDataModel;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -32,26 +32,25 @@ public interface ApiServices {
     Call<ResponseBody> getAndroidInfo();
 
     @GET("api/data/Android/10/1")
-    Call<GankBean> getAndroidInfoWithGson();
+    Call<GankModel> getAndroidInfoWithGson();
 
     @GET("macros/s/AKfycbxxgTSWXbEiX8EHBSWrt6PVDnMAfmM3FLYDAhy-cqgDTRVY6hA/exec")
-    Call<AntBean> getAntInfoWithGson();
+    Call<AntModel> getAntInfoWithGson();
 
 
     @GET("onebox/weather/query?cityname=深圳")
-    Call<WeatherDataBean> getWeather(@Query("key") String key);
+    Call<WeatherDataModel> getWeather(@Query("key") String key);
 
     @GET("api/data/Android/10/{page}")
-    Call<GankBean> getAndroidInfoWithParameters(@Path("page") int page);
+    Call<GankModel> getAndroidInfoWithParameters(@Path("page") int page);
 
     /*轉換URL把括號內刪除 並給入完整的URL即可*/
     @GET
-    Observable<WeatherDataBean> getWeatherWithParameters(@Url String URL ,@QueryMap Map<String, String> params);
+    Observable<WeatherDataModel> getWeatherWithParameters(@Url String URL , @QueryMap Map<String, String> params);
 
     @POST("{page}")
     Call<MainModel> getNotificationCount(@Path("page") String page, @Body HashMap hashMap);
 
     @POST("{page}")
     Observable<MainModel> getNotificationCountWithRxJava(@Path("page") String page, @Body HashMap hashMap);
-
 }
