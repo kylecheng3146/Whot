@@ -52,7 +52,6 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
         btnRetrofitGet.setOnClickListener(this);
         btnRetrofitGetGson.setOnClickListener(this);
         btnRetrofitGetDym.setOnClickListener(this);
-        btnRetrofitParameter.setOnClickListener(this);
     }
 
     @Override
@@ -132,25 +131,6 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
                     }
                 });
                 break;
-            case R.id.btn_retrofit_parameter:
-                retrofit = new Retrofit.Builder()
-                        .baseUrl("http://gank.io/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-                api = retrofit.create(ApiServices.class);
-
-                api.getAndroidInfoWithParameters(1).enqueue(new Callback<GankModel>() {
-                    @Override
-                    public void onResponse(Call<GankModel> call, Response<GankModel> response) {
-                        tvResult.setText(response.body().getResults().get(0).getDesc());
-                    }
-
-                    @Override
-                    public void onFailure(Call<GankModel> call, Throwable t) {
-
-                    }
-                });
-                break;
         }
     }
 
@@ -162,6 +142,11 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
     @Override
     public void getRetrofitPost(MainModel bean) {
         tvResult.setText(bean.getSqlDetail());
+    }
+
+    @Override
+    public void getRetrofitParameter(GankModel bean) {
+        tvResult.setText(bean.getResults().get(0).getDesc());
     }
 
     @OnClick(R.id.btn_retrofit_rxjava)
@@ -179,7 +164,7 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
 
     @OnClick(R.id.btn_retrofit_post)
     @Override
-    public void onRetrofitPost() {
+    public void onRetrofitPostClick() {
         hashMap.put("IMEI", "355693063092533");
         hashMap.put("CusID", "0005967");
         hashMap.put("TimeStamp", "1497235728");
@@ -192,13 +177,20 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
 
     @OnClick(R.id.btn_retrofit_combine)
     @Override
-    public void onRetrofitCombine() {
+    public void onRetrofitCombineClick() {
         Map<String, String> map = new HashMap<>();
         map.put("cityname", "深圳");
         map.put("key", "4ea58de8a7573377cec0046f5e2469d5");
         presenter = new MainPresenter(this);
         presenter.loadDataByRetrofitCombine(map);
         hashMap.clear();
+    }
+
+    @OnClick(R.id.btn_retrofit_parameter)
+    @Override
+    public void onRetrofitParameterClick() {
+        presenter = new MainPresenter(this);
+        presenter.loadDataByRetrofitParameter();
     }
 
     @Override

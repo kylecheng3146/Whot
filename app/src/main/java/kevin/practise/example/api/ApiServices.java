@@ -24,10 +24,6 @@ import rx.Observable;
 
 public interface ApiServices {
 
-//    @GET("macros/s/AKfycbxxgTSWXbEiX8EHBSWrt6PVDnMAfmM3FLYDAhy-cqgDTRVY6hA/exec")
-//    @GET("somepath?keyword1=value1&keyword2=value2&keyword3=value3")
-//    Call<ResponseBody> getAndroidInfo();
-
     @GET("api/data/Android/10/1")
     Call<ResponseBody> getAndroidInfo();
 
@@ -41,8 +37,8 @@ public interface ApiServices {
     @GET("onebox/weather/query?cityname=深圳")
     Call<WeatherDataModel> getWeather(@Query("key") String key);
 
-    @GET("api/data/Android/10/{page}")
-    Call<GankModel> getAndroidInfoWithParameters(@Path("page") int page);
+    @GET("{fullUrl}")
+    Observable<GankModel> getAndroidInfoWithParameters(@Path(value = "fullUrl", encoded = true)  String fullUrl);
 
     /*轉換URL把括號內刪除 並給入完整的URL即可*/
     @GET
@@ -53,4 +49,5 @@ public interface ApiServices {
 
     @POST("{page}")
     Observable<MainModel> getNotificationCountWithRxJava(@Path("page") String page, @Body HashMap hashMap);
+
 }

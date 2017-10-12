@@ -59,6 +59,11 @@ public class CommonUtils {
         return matcher.matches();
     }
 
+
+    public static boolean isPasswordValid(String password) {
+        return password.length() > 4;
+    }
+
     public static String loadJSONFromAsset(Context context, String jsonFileName)
             throws IOException {
 

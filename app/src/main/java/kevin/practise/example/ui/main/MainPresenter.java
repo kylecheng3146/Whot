@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kevin.practise.example.base.BasePresenter;
+import kevin.practise.example.data.GankModel;
 import kevin.practise.example.data.MainModel;
 import kevin.practise.example.data.WeatherDataModel;
 import kevin.practise.example.http.RxManager;
@@ -25,6 +26,7 @@ class MainPresenter extends BasePresenter<MainView> {
 
     /**
      * RxJava範例
+     * @param hashMap [POST參數]
      * */
     void loadDataByRetrofitRxJava(HashMap<String, String> hashMap) {
         mvpView.showLoading();
@@ -50,7 +52,8 @@ class MainPresenter extends BasePresenter<MainView> {
     }
 
     /**
-     * Retrofit post example
+     * RetrofitPost
+     * @param hashMap [POST參數]
      * */
     void loadDataByRetrofitPost(HashMap<String, String> hashMap) {
         mvpView.showLoading();
@@ -72,7 +75,8 @@ class MainPresenter extends BasePresenter<MainView> {
     }
 
     /**
-     * Retrofit post example
+     * GET參數拼接
+     * @param hashMap [GET 拼接參數 ex:abc=123&dfg=456]
      * */
     void loadDataByRetrofitCombine(Map<String,String> hashMap) {
         mvpView.showLoading();
@@ -81,6 +85,31 @@ class MainPresenter extends BasePresenter<MainView> {
             @Override
             public void _onNext(WeatherDataModel model) {
                 mvpView.showMessage(String.valueOf(model.getResult().getData().getDate()));
+            }
+
+            @Override
+            public void _onError(String msg) {
+                mvpView.showMessage(msg);
+            }
+
+            @Override
+            public void _onCompleted() {
+                mvpView.hideLoading();
+                detachView();
+            }
+        });
+    }
+
+    /**
+     * GET參數請求
+     * */
+    void loadDataByRetrofitParameter(){
+        mvpView.showLoading();
+        RxSubscriber.getInstance().doSubscribe(apiServices.getAndroidInfoWithParameters("http://gank.io/api/data/Android/10/1"), new RxManager<GankModel>() {
+            @Override
+            public void _onNext(GankModel model) {
+                mvpView.getRetrofitParameter(model);
+                mvpView.showMessage(model.getResults().get(0).getDesc());
             }
 
             @Override
