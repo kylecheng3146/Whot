@@ -7,7 +7,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,7 +25,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
     @BindView(R.id.et_password) EditText etPassword;
     @BindView(R.id.btn_login) Button btnLogin;
     @BindView(R.id.email_login_form) LinearLayout emailLoginForm;
-    @BindView(R.id.login_form) ScrollView loginForm;
     @BindView(R.id.et_mail) EditText etEmail;
 
     private LoginPresenter presenter;

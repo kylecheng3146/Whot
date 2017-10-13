@@ -2,14 +2,18 @@ package kevin.practise.example.base;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.os.Handler;
 import android.support.annotation.LayoutRes;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
+import kevin.practise.example.R;
 import kevin.practise.example.util.CommonUtils;
 
 /**
@@ -19,6 +23,7 @@ import kevin.practise.example.util.CommonUtils;
 public class BaseActivity extends AppCompatActivity implements BaseView {
     public Activity mActivity;
     private ProgressDialog mProgressDialog;
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
@@ -80,5 +85,27 @@ public class BaseActivity extends AppCompatActivity implements BaseView {
     @Override
     public void onRefreshView() {
 
+    }
+
+    /**
+     * 虛擬返回鍵事件
+     */
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            //判斷連續按兩次返回鍵離開主程式
+            if (doubleBackToExitPressedOnce) {
+                ActivityCompat.finishAffinity(this);
+                return super.onKeyDown(keyCode, event);
+            }
+            this.doubleBackToExitPressedOnce = true;
+            showMessage(getString(R.string.back_click_twice));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce=false;
+                }
+            }, 2000);
+        }
+        return false;
     }
 }

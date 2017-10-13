@@ -11,6 +11,7 @@
     <string name="error_invalid_password">您輸入的密碼過短</string>
     <string name="error_incorrect_password">您輸入的密碼錯誤</string>
     <string name="error_field_required">請輸入您的信箱</string>
+    <string name="back_click_twice">請再按一次返回鍵離開</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
