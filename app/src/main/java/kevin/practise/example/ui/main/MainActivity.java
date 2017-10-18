@@ -87,25 +87,25 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
 
                 break;
             case R.id.btn_retrofit_get_gson:
-                retrofit = new Retrofit.Builder()
-                        .baseUrl("https://script.google.com/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-                api = retrofit.create(ApiServices.class);
-                Call<AntModel> call_gson = api.getAntInfoWithGson();
-                call_gson.enqueue(new Callback<AntModel>() {
-                    @Override
-                    public void onResponse(Call<AntModel> call, Response<AntModel> response) {
-                        Log.i("TAG",response.body().getName() );
-                        tvResult.setText(response.body().getName());
-                    }
-
-                    @Override
-                    public void onFailure(Call<AntModel> call, Throwable t) {
-                        i("TAG", "@@@@@@@@");
-
-                    }
-                });
+//                retrofit = new Retrofit.Builder()
+//                        .baseUrl("https://script.google.com/")
+//                        .addConverterFactory(GsonConverterFactory.create())
+//                        .build();
+//                api = retrofit.create(ApiServices.class);
+//                Call<AntModel> call_gson = api.getAntInfoWithGson();
+//                call_gson.enqueue(new Callback<AntModel>() {
+//                    @Override
+//                    public void onResponse(Call<AntModel> call, Response<AntModel> response) {
+//                        Log.i("TAG",response.body().getName() );
+//                        tvResult.setText(response.body().getName());
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<AntModel> call, Throwable t) {
+//                        i("TAG", "@@@@@@@@");
+//
+//                    }
+//                });
                 break;
 
             case R.id.btn_retrofit_get_dym:
@@ -147,6 +147,11 @@ public class MainActivity extends BaseActivity implements MainView,View.OnClickL
     @Override
     public void getRetrofitParameter(GankModel bean) {
         tvResult.setText(bean.getResults().get(0).getDesc());
+    }
+
+    @Override
+    public void getAntResult(AntModel bean) {
+
     }
 
     @OnClick(R.id.btn_retrofit_rxjava)

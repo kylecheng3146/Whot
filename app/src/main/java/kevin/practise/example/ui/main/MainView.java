@@ -1,6 +1,7 @@
 package kevin.practise.example.ui.main;
 
 import kevin.practise.example.base.BaseView;
+import kevin.practise.example.data.AntModel;
 import kevin.practise.example.data.GankModel;
 import kevin.practise.example.data.MainModel;
 
@@ -15,6 +16,8 @@ public interface MainView extends BaseView {
     void getRetrofitPost(MainModel bean);
 
     void getRetrofitParameter(GankModel bean);
+
+    void getAntResult(AntModel bean);
 
     void onRxJavaClick();
 

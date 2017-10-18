@@ -72,7 +72,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
             return;
         }
 
-        showMessage("@@@@@");
+        presenter = new LoginPresenter(this);
     }
 
     @OnEditorAction(R.id.et_password)

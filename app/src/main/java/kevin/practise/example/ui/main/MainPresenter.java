@@ -3,7 +3,9 @@ package kevin.practise.example.ui.main;
 import java.util.HashMap;
 import java.util.Map;
 
+import kevin.practise.example.api.ApiServices;
 import kevin.practise.example.base.BasePresenter;
+import kevin.practise.example.data.AntModel;
 import kevin.practise.example.data.GankModel;
 import kevin.practise.example.data.MainModel;
 import kevin.practise.example.data.WeatherDataModel;
@@ -18,12 +20,16 @@ import retrofit2.Response;
  * Created by kevin on 21/09/2017.
  */
 
-class MainPresenter extends BasePresenter<MainView> {
+public class MainPresenter extends BasePresenter<MainView> {
 
-    MainPresenter(MainView view) {
+    public MainPresenter(MainView view) {
         attachView(view);
     }
 
+    public MainPresenter(ApiServices apiServices,MainView view) {
+        this.apiServices = apiServices;
+        attachView(view);
+    }
     /**
      * RxJava範例
      * @param hashMap [POST參數]
@@ -110,6 +116,27 @@ class MainPresenter extends BasePresenter<MainView> {
             public void _onNext(GankModel model) {
                 mvpView.getRetrofitParameter(model);
                 mvpView.showMessage(model.getResults().get(0).getDesc());
+            }
+
+            @Override
+            public void _onError(String msg) {
+                mvpView.showMessage(msg);
+            }
+
+            @Override
+            public void _onCompleted() {
+                mvpView.hideLoading();
+                detachView();
+            }
+        });
+    }
+
+    void loadAntData(){
+        mvpView.showLoading();
+        RxSubscriber.getInstance().doSubscribe(apiServices.getAntInfoWithGson("https://script.google.com/macros/s/AKfycbxxgTSWXbEiX8EHBSWrt6PVDnMAfmM3FLYDAhy-cqgDTRVY6hA/exec"), new RxManager<AntModel>() {
+            @Override
+            public void _onNext(AntModel model) {
+                mvpView.getAntResult(model);
             }
 
             @Override

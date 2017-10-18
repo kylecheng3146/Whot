@@ -30,8 +30,8 @@ public interface ApiServices {
     @GET("api/data/Android/10/1")
     Call<GankModel> getAndroidInfoWithGson();
 
-    @GET("macros/s/AKfycbxxgTSWXbEiX8EHBSWrt6PVDnMAfmM3FLYDAhy-cqgDTRVY6hA/exec")
-    Call<AntModel> getAntInfoWithGson();
+    @GET("{fullUrl}")
+    Observable<AntModel> getAntInfoWithGson(@Path(value = "fullUrl", encoded = true)  String fullUrl);
 
 
     @GET("onebox/weather/query?cityname=深圳")
