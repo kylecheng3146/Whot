@@ -55,7 +55,7 @@ public class MainPresenterTest {
         verify(mainView).getNotificationData(captor.capture());
         mainModel = captor.getValue();
 
-        Assert.assertEquals(mainModel.isResult(),true);
+        Assert.assertEquals(true,mainModel.isResult());
     }
 
     @Test
@@ -66,7 +66,7 @@ public class MainPresenterTest {
         ArgumentCaptor<AntModel> captor = ArgumentCaptor.forClass(AntModel.class);
         verify(mainView).getAntResult(captor.capture());
         antModel = captor.getValue();
-        Assert.assertEquals(antModel.getName(),"Ant");
+        Assert.assertEquals("Ant",antModel.getName());
     }
 
 }
