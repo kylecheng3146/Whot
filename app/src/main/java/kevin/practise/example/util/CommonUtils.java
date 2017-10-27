@@ -78,7 +78,10 @@ public class CommonUtils {
         return new String(buffer, "UTF-8");
     }
 
+    /**
+     * 取得時間戳
+     * */
     public static String getTimeStamp() {
-        return new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+        return new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.TAIWAN).format(new Date());
     }
 }

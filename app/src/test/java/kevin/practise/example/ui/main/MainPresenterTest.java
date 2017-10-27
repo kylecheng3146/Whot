@@ -16,14 +16,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
+/** MAIN UNIT TEST
  * Created by Kevin on 18/10/2017.
  */
 public class MainPresenterTest {
 
-    MainPresenter mainPresenter;
-    MainView mainView;
-    ApiServices apiServices;
+    private MainPresenter mainPresenter;
+    private MainView mainView;
+    private ApiServices apiServices;
 
     @Before
     public void setUp() throws Exception {

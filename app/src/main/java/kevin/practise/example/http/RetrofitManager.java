@@ -19,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitManager {
     private static ApiServices SERVICE;
     //請求逾時
-    private static final int DEFAULT_TIMEOUT = 10000;
+    private static final int DEFAULT_TIMEOUT = 4;
 
     public static ApiServices getDefault(String URL) {
         if (SERVICE == null) {
