@@ -1,5 +1,6 @@
 package kevin.practise.example.base;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Handler;
@@ -20,6 +21,7 @@ import kevin.practise.example.util.CommonUtils;
  * Created by Kevin on 21/09/2017.
  */
 
+@SuppressLint("Registered")
 public class BaseActivity extends AppCompatActivity implements BaseView {
     public Activity mActivity;
     private ProgressDialog mProgressDialog;

@@ -3,9 +3,11 @@ package kevin.practise.example.util;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.provider.Settings;
 
 import java.io.IOException;
@@ -19,7 +21,7 @@ import java.util.regex.Pattern;
 import kevin.practise.example.R;
 
 /** utility method everyone can use it
- * Created by sapido on 22/09/2017.
+ * Created by kevin on 22/09/2017.
  */
 
 public class CommonUtils {
@@ -30,6 +32,10 @@ public class CommonUtils {
         // This utility class is not publicly instantiable
     }
 
+    /**
+     * 載入訊息 loading 的 Dialog
+     * @param context [頁面Context]
+     * */
     public static ProgressDialog showLoadingDialog(Context context) {
         ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.show();
@@ -48,6 +54,10 @@ public class CommonUtils {
         return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
+    /**
+     * 檢查電子郵件格式
+     * @param email [電子郵件]
+     * */
     public static boolean isEmailValid(String email) {
         Pattern pattern;
         Matcher matcher;
@@ -59,7 +69,10 @@ public class CommonUtils {
         return matcher.matches();
     }
 
-
+    /**
+     * 檢查密碼長度
+     * @param password [密碼]
+     * */
     public static boolean isPasswordValid(String password) {
         return password.length() > 4;
     }
@@ -83,5 +96,29 @@ public class CommonUtils {
      * */
     public static String getTimeStamp() {
         return new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.TAIWAN).format(new Date());
+    }
+
+    /**
+     * 跳轉頁面
+     * @param context [頁面context]
+     * @param act [activity]
+     */
+    public static void intentActivity(Context context,Class<?> act) {
+        context.startActivity(new Intent(context,act));
+    }
+
+    /**
+     * 帶有參數的跳轉頁面
+     * @param context [頁面context]
+     * @param act [activity]
+     * @param bundle [bundle value]
+     */
+    public static void intentActivity(Context context,Class<?> act, Bundle bundle) {
+        Intent intent = new Intent();
+        intent.setClass(context, act);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        context.startActivity(intent);
     }
 }
