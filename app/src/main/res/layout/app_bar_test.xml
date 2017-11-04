@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="kevin.practise.example.ui.test.TestActivity">
+    tools:context="kevin.practise.hot.kevin.practise.whot.ui.test.TestActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
