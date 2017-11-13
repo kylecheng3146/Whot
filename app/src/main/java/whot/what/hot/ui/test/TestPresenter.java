@@ -1,4 +1,4 @@
-package whot.what.hot.ui.main;
+package whot.what.hot.ui.test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,13 +20,13 @@ import retrofit2.Response;
  * Created by kevin on 21/09/2017.
  */
 
-public class MainPresenter extends BasePresenter<MainView> {
+public class TestPresenter extends BasePresenter<TestView> {
 
-    public MainPresenter(MainView view) {
+    public TestPresenter(TestView view) {
         attachView(view);
     }
 
-    public MainPresenter(ApiServices apiServices, MainView view) {
+    public TestPresenter(ApiServices apiServices, TestView view) {
         this.apiServices = apiServices;
         attachView(view);
     }

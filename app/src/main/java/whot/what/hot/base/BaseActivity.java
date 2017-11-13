@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
-import kevin.practise.hot.R;
+import whot.what.hot.R;
 import whot.what.hot.util.CommonUtils;
 
 /**
@@ -99,7 +99,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
                 return super.onKeyDown(keyCode, event);
             }
             this.doubleBackToExitPressedOnce = true;
-            showMessage(getString(R.string.back_click_twice));
+            showMessage(getString(R.string.alert_back_click_twice));
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {

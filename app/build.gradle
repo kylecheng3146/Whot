@@ -50,4 +50,5 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0-rc1"
     //    For testing Room migrations, add:
     testImplementation 'android.arch.persistence.room:testing:1.0.0-rc1'
+    compile 'com.facebook.android:facebook-android-sdk:4.27.0'
 }

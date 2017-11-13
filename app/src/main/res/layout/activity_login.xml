@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="kevin.practise.hot.kevin.practise.whot.ui.login.LoginActivity">
+    tools:context=".ui.login.LoginActivity">
 
     <!-- Login progress -->
 
@@ -20,10 +21,10 @@
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -34,7 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="@string/prompt_email"
+                    android:hint="@string/login_prompt_email"
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionUnspecified"
                     android:inputType="text|textEmailAddress"
@@ -51,7 +52,7 @@
                     android:id="@+id/et_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password"
+                    android:hint="@string/login_prompt_password"
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
@@ -63,13 +64,23 @@
             <Button
                 android:id="@+id/btn_login"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:layout_alignParentBottom="true"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="50dp"
                 android:background="@drawable/button_style"
-                android:text="@string/action_sign_in"
-                android:textColor="@drawable/button_text"
-                android:textSize="@dimen/button_text_size" />
+                android:padding="2dp"
+                android:text="@string/login_sign_in"
+                android:textColor="#fff"
+                android:textSize="14sp" />
+
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/login_button"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:textSize="14sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                facebook:com_facebook_login_text="使用Facebook登入" />
 
         </LinearLayout>
     </RelativeLayout>

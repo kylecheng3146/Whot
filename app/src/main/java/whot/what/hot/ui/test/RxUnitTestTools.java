@@ -1,4 +1,4 @@
-package whot.what.hot.ui.main;
+package whot.what.hot.ui.test;
 
 import rx.Scheduler;
 import rx.android.plugins.RxAndroidPlugins;

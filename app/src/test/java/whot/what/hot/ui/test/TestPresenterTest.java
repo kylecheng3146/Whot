@@ -1,4 +1,4 @@
-package whot.what.hot.ui.main;
+package whot.what.hot.ui.test;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,10 +19,10 @@ import static org.mockito.Mockito.when;
 /** MAIN UNIT TEST
  * Created by Kevin on 18/10/2017.
  */
-public class MainPresenterTest {
+public class TestPresenterTest {
 
-    private MainPresenter mainPresenter;
-    private MainView mainView;
+    private TestPresenter testPresenter;
+    private TestView testView;
     private ApiServices apiServices;
 
     @Before
@@ -30,10 +30,10 @@ public class MainPresenterTest {
         RxUnitTestTools.openRxTools();
 
         // 生成mock對象
-        mainView = mock(MainView.class);
+        testView = mock(TestView.class);
         apiServices = mock(ApiServices.class);
 
-        mainPresenter = new MainPresenter(apiServices,mainView);
+        testPresenter = new TestPresenter(apiServices, testView);
     }
 
     @Test
@@ -48,11 +48,11 @@ public class MainPresenterTest {
         MainModel mainModel = new MainModel();
 
         when(apiServices.getNotificationCountWithRxJava("api/Android/NotifiListCount", hashMap)).thenReturn(Observable.just(mainModel));
-        mainPresenter.loadDataByRetrofitRxJava(hashMap);
+        testPresenter.loadDataByRetrofitRxJava(hashMap);
 
         ArgumentCaptor<MainModel> captor = ArgumentCaptor.forClass(MainModel.class);
 
-        verify(mainView).getNotificationData(captor.capture());
+        verify(testView).getNotificationData(captor.capture());
         mainModel = captor.getValue();
 
         Assert.assertEquals(true,mainModel.isResult());
@@ -62,9 +62,9 @@ public class MainPresenterTest {
     public void testAntResult() throws Exception {
         AntModel antModel = new AntModel();
         when(apiServices.getAntInfoWithGson("https://script.google.com/macros/s/AKfycbxxgTSWXbEiX8EHBSWrt6PVDnMAfmM3FLYDAhy-cqgDTRVY6hA/exec")).thenReturn(Observable.just(antModel));
-        mainPresenter.loadAntData();
+        testPresenter.loadAntData();
         ArgumentCaptor<AntModel> captor = ArgumentCaptor.forClass(AntModel.class);
-        verify(mainView).getAntResult(captor.capture());
+        verify(testView).getAntResult(captor.capture());
         antModel = captor.getValue();
         Assert.assertEquals("Ant",antModel.getName());
     }

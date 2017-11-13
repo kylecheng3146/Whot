@@ -2,6 +2,7 @@ package whot.what.hot.ui.login;
 
 import android.annotation.SuppressLint;
 import android.arch.persistence.room.Room;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,17 +13,24 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnEditorAction;
-import kevin.practise.hot.R;
+import whot.what.hot.R;
 import whot.what.hot.base.BaseActivity;
-import whot.what.hot.ui.test.TestActivity;
+import whot.what.hot.ui.main.MainActivity;
 import whot.what.hot.util.CommonUtils;
-import whot.what.hot.util.LeetCodePractise;
 import whot.what.hot.util.SharedPreferenceUtils;
 
 /**
@@ -39,11 +47,14 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     private LoginEntity loginEntity;
     private LoginDao loginDao;
+    CallbackManager callbackManager;
 
     @SuppressLint("StaticFieldLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(this);
+        AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
@@ -52,7 +63,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
         etEmail.setText(SharedPreferenceUtils.getEmail(this));
 
 
-        LeetCodePractise.reverseString("hello");
+//        LeetCodePractise.reverseString("hello");
         final AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "user.db").build();
 
@@ -75,18 +86,37 @@ public class LoginActivity extends BaseActivity implements LoginView {
                     etEmail.setThreshold(1);//will start working from first character
                     etEmail.setAdapter(adapter);//setting the adapter data into the
                 }
-                else {
-                    onBackPressed();
-                }
             }
         }.execute();
+
+        callbackManager = CallbackManager.Factory.create();
+        LoginButton loginButton = findViewById(R.id.login_button);
+        loginButton.setReadPermissions("email");
+        // Callback registration
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                CommonUtils.intentActivity(LoginActivity.this,MainActivity.class);
+                // App code
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+            }
+        });
     }
 
     @OnClick(R.id.btn_login)
     @Override
     public void onLoginClick() {
 
-        View focusView = null;
+        View focusView;
         // Reset errors.
         etEmail.setError(null);
         etPassword.setError(null);
@@ -132,7 +162,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
         //紀錄登入的電子郵件到SharedPreference後跳轉頁面到首頁
         SharedPreferenceUtils.setEmail(this,email);
-        CommonUtils.intentActivity(this, TestActivity.class);
+        CommonUtils.intentActivity(this, MainActivity.class);
 //        presenter = new LoginPresenter(this);
 
     }
@@ -145,6 +175,12 @@ public class LoginActivity extends BaseActivity implements LoginView {
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }
 

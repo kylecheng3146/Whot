@@ -1,204 +1,104 @@
 package whot.what.hot.ui.main;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import whot.what.hot.R;
 
-import butterknife.BindView;
-import butterknife.OnClick;
-import kevin.practise.hot.R;
-import whot.what.hot.api.ApiServices;
-import whot.what.hot.base.BaseActivity;
-import whot.what.hot.data.AntModel;
-import whot.what.hot.data.GankModel;
-import whot.what.hot.data.MainModel;
-import whot.what.hot.data.WeatherDataModel;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-import static android.util.Log.i;
-
-public class MainActivity extends BaseActivity implements MainView,View.OnClickListener {
-
-
-    @BindView(R.id.tv_result) TextView tvResult;
-    @BindView(R.id.btn_retrofit_get) Button btnRetrofitGet;
-    @BindView(R.id.btn_retrofit_get_gson) Button btnRetrofitGetGson;
-    @BindView(R.id.btn_retrofit_get_dym) Button btnRetrofitGetDym;
-    @BindView(R.id.btn_retrofit_parameter) Button btnRetrofitParameter;
-    @BindView(R.id.btn_retrofit_combine) Button btnRetrofitCombine;
-    @BindView(R.id.btn_retrofit_post) Button btnRetrofitPost;
-    @BindView(R.id.btn_retrofit_rxjava) Button btnRetrofitRxjava;
-
-    private MainPresenter presenter;
-    HashMap<String, String> hashMap = new HashMap<>();
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        btnRetrofitGet.setOnClickListener(this);
-        btnRetrofitGetGson.setOnClickListener(this);
-        btnRetrofitGetDym.setOnClickListener(this);
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
-    public void onClick(View view) {
-
-        switch (view.getId()) {
-            case R.id.btn_retrofit_get:
-                Retrofit retrofit;
-                ApiServices api;
-
-                Retrofit retrofit1 = new Retrofit.Builder()
-                        .baseUrl("http://gank.io/")
-                        .build();
-
-                ApiServices api1 = retrofit1.create(ApiServices.class);
-                Call<ResponseBody> call = api1.getAndroidInfo();
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        try {
-                            String result = response.body().string();
-                            Log.i("@@@", result);
-                            tvResult.setText(result);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.i("TAG", "@@@@");
-                    }
-                });
-
-                break;
-            case R.id.btn_retrofit_get_gson:
-//                retrofit = new Retrofit.Builder()
-//                        .baseUrl("https://script.google.com/")
-//                        .addConverterFactory(GsonConverterFactory.create())
-//                        .build();
-//                api = retrofit.create(ApiServices.class);
-//                Call<AntModel> call_gson = api.getAntInfoWithGson();
-//                call_gson.enqueue(new Callback<AntModel>() {
-//                    @Override
-//                    public void onResponse(Call<AntModel> call, Response<AntModel> response) {
-//                        Log.i("TAG",response.body().getName() );
-//                        tvResult.setText(response.body().getName());
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<AntModel> call, Throwable t) {
-//                        i("TAG", "@@@@@@@@");
-//
-//                    }
-//                });
-                break;
-
-            case R.id.btn_retrofit_get_dym:
-                retrofit = new Retrofit.Builder()
-                        .baseUrl("http://op.juhe.cn/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-                api = retrofit.create(ApiServices.class);
-
-                Call<WeatherDataModel> call_dym = api.getWeather("4ea58de8a7573377cec0046f5e2469d5");
-                //异步
-                call_dym.enqueue(new Callback<WeatherDataModel>() {
-                    @Override
-                    public void onResponse(Call<WeatherDataModel> call, Response<WeatherDataModel> response) {
-                        String info = response.body().getResult().getData().getRealtime().getWeather().getInfo();
-                        tvResult.setText("深圳天氣：" + info);
-                    }
-
-                    @Override
-                    public void onFailure(Call<WeatherDataModel> call, Throwable t) {
-                        i("TAG", "@@@@@@@@");
-
-                    }
-                });
-                break;
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
     }
 
     @Override
-    public void getNotificationData(MainModel bean) {
-        tvResult.setText(bean.getResponse());
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
     }
 
     @Override
-    public void getRetrofitPost(MainModel bean) {
-        tvResult.setText(bean.getSqlDetail());
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public void getRetrofitParameter(GankModel bean) {
-        tvResult.setText(bean.getResults().get(0).getDesc());
-    }
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Handle navigation view item clicks here.
 
-    @Override
-    public void getAntResult(AntModel bean) {
+        switch (item.getItemId()){
+            case R.id.nav_home:
+                break;
+            case R.id.nav_gallery:
+                break;
+            case R.id.nav_slideshow:
+                break;
+            case R.id.nav_manage:
+                break;
+            case R.id.nav_share:
+                break;
+            case R.id.nav_send:
+                break;
+        }
 
-    }
-
-    @OnClick(R.id.btn_retrofit_rxjava)
-    @Override
-    public void onRxJavaClick() {
-        hashMap.put("IMEI", "355693063092533");
-        hashMap.put("CusID", "0005967");
-        hashMap.put("TimeStamp", "1497235728");
-        hashMap.put("Signature", "ce42ccc9a6da004321c8f4dab7632c6b849245669634c155a9497afdc6fdfe11");
-        hashMap.put("AppID", "20170518A");
-        presenter = new MainPresenter(this);
-        presenter.loadDataByRetrofitRxJava(hashMap);
-        hashMap.clear();
-    }
-
-    @OnClick(R.id.btn_retrofit_post)
-    @Override
-    public void onRetrofitPostClick() {
-        hashMap.put("IMEI", "355693063092533");
-        hashMap.put("CusID", "0005967");
-        hashMap.put("TimeStamp", "1497235728");
-        hashMap.put("Signature", "ce42ccc9a6da004321c8f4dab7632c6b849245669634c155a9497afdc6fdfe11");
-        hashMap.put("AppID", "20170518A");
-        presenter = new MainPresenter(this);
-        presenter.loadDataByRetrofitPost(hashMap);
-        hashMap.clear();
-    }
-
-    @OnClick(R.id.btn_retrofit_combine)
-    @Override
-    public void onRetrofitCombineClick() {
-        Map<String, String> map = new HashMap<>();
-        map.put("cityname", "深圳");
-        map.put("key", "4ea58de8a7573377cec0046f5e2469d5");
-        presenter = new MainPresenter(this);
-        presenter.loadDataByRetrofitCombine(map);
-        hashMap.clear();
-    }
-
-    @OnClick(R.id.btn_retrofit_parameter)
-    @Override
-    public void onRetrofitParameterClick() {
-        presenter = new MainPresenter(this);
-        presenter.loadDataByRetrofitParameter();
-    }
-
-    @Override
-    public void onRefreshView() {
-
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }

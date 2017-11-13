@@ -1,4 +1,4 @@
-package whot.what.hot.ui.main;
+package whot.what.hot.ui.test;
 
 import whot.what.hot.base.BaseView;
 import whot.what.hot.data.AntModel;
@@ -9,7 +9,7 @@ import whot.what.hot.data.MainModel;
  * Created by Kevin on 22/09/2017.
  */
 
-public interface MainView extends BaseView {
+public interface TestView extends BaseView {
 
     void getNotificationData(MainModel bean);
 

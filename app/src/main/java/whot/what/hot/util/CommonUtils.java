@@ -18,7 +18,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import kevin.practise.hot.R;
+import whot.what.hot.R;
 
 /** utility method everyone can use it
  * Created by kevin on 22/09/2017.
