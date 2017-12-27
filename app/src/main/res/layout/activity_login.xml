@@ -17,6 +17,42 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/purchase_button_not_invalidated_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            android:text="@string/purchase_done"
+            android:textAppearance="@android:style/TextAppearance.Material.Body2"
+            android:textColor="?android:attr/colorAccent"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/encrypted_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            android:text="@string/purchase_done"
+            android:textAppearance="@android:style/TextAppearance.Material.Body2"
+            android:textColor="?android:attr/colorAccent"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/confirmation_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            android:text="@string/purchase_done"
+            android:textAppearance="@android:style/TextAppearance.Material.Body2"
+            android:textColor="?android:attr/colorAccent"
+            android:visibility="gone" />
+
         <LinearLayout
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
@@ -81,6 +117,30 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
                 facebook:com_facebook_login_text="使用Facebook登入" />
+
+            <Button
+                android:id="@+id/purchase_button"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/button_style"
+                android:padding="2dp"
+                android:text="指紋"
+                android:textColor="#fff"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/purchase_button_not_invalidated"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/button_style"
+                android:padding="2dp"
+                android:text="指紋"
+                android:textColor="#fff"
+                android:textSize="14sp" />
 
         </LinearLayout>
     </RelativeLayout>

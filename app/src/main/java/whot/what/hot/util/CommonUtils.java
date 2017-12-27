@@ -121,4 +121,21 @@ public class CommonUtils {
         }
         context.startActivity(intent);
     }
+
+//    public static void fetchFacebookKeyHash(){
+//        try {
+//            PackageInfo info = getPackageManager().getPackageInfo(
+//                    "Whot.what.hot",
+//                    PackageManager.GET_SIGNATURES);
+//            for (Signature signature : info.signatures) {
+//                MessageDigest md = MessageDigest.getInstance("SHA");
+//                md.update(signature.toByteArray());
+//                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+//            }
+//        } catch (PackageManager.NameNotFoundException e) {
+//
+//        } catch (NoSuchAlgorithmException e) {
+//
+//        }
+//    }
 }

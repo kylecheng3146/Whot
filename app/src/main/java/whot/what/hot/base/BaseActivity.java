@@ -13,11 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
+
 import butterknife.ButterKnife;
 import whot.what.hot.R;
 import whot.what.hot.util.CommonUtils;
 
-/**
+/** every activity extends base
  * Created by Kevin on 21/09/2017.
  */
 
@@ -93,19 +95,25 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
      */
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            //判斷連續按兩次返回鍵離開主程式
-            if (doubleBackToExitPressedOnce) {
-                ActivityCompat.finishAffinity(this);
-                return super.onKeyDown(keyCode, event);
-            }
-            this.doubleBackToExitPressedOnce = true;
-            showMessage(getString(R.string.alert_back_click_twice));
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    doubleBackToExitPressedOnce=false;
+            if("LoginActivity".equals(BaseActivity.this.getClass().getSimpleName())){
+                //判斷連續按兩次返回鍵離開主程式
+                if (doubleBackToExitPressedOnce) {
+                    ActivityCompat.finishAffinity(this);
+                    return super.onKeyDown(keyCode, event);
                 }
-            }, 2000);
+                this.doubleBackToExitPressedOnce = true;
+                showMessage(getString(R.string.alert_back_click_twice));
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce=false;
+                    }
+                }, 2000);
+            }else{
+                //facebook 登出
+                LoginManager.getInstance().logOut();
+                this.finish();
+            }
         }
         return false;
     }
