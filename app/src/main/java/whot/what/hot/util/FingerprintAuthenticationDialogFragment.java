@@ -48,9 +48,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
         implements TextView.OnEditorActionListener, FingerprintUiHelper.Callback {
 
     private Button mCancelButton;
-    private Button mSecondDialogButton;
     private View mFingerprintContent;
-    private View mBackupContent;
     private EditText mPassword;
     private CheckBox mUseFingerprintFutureCheckBox;
     private TextView mPasswordDescriptionTextView;
@@ -79,27 +77,16 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
             Bundle savedInstanceState) {
         getDialog().setTitle(getString(R.string.sign_in));
         View v = inflater.inflate(R.layout.fingerprint_dialog_container, container, false);
-        mCancelButton = v.findViewById(R.id.cancel_button);
+
+        mCancelButton = v.findViewById(R.id.second_dialog_button);
         mCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dismiss();
             }
         });
-
-        mSecondDialogButton = v.findViewById(R.id.second_dialog_button);
-        mSecondDialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mStage == Stage.FINGERPRINT) {
-                    goToBackup();
-                } else {
-                    verifyPassword();
-                }
-            }
-        });
         mFingerprintContent = v.findViewById(R.id.fingerprint_container);
-        mBackupContent = v.findViewById(R.id.backup_container);
+//        mBackupContent = v.findViewById(R.id.backup_container);
         mPassword = v.findViewById(R.id.password);
         mPassword.setOnEditorActionListener(this);
         mPasswordDescriptionTextView = v.findViewById(R.id.password_description);
@@ -190,7 +177,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
             }
         }
         mPassword.setText("");
-        mActivity.onPurchased(false /* without Fingerprint */, null);
+        mActivity.onLogin(false /* without Fingerprint */, null);
 
         dismiss();
     }
@@ -215,22 +202,11 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
         switch (mStage) {
             case FINGERPRINT:
                 mCancelButton.setText(R.string.cancel);
-                mSecondDialogButton.setText(R.string.use_password);
                 mFingerprintContent.setVisibility(View.VISIBLE);
-                mBackupContent.setVisibility(View.GONE);
+//                mBackupContent.setVisibility(View.GONE);
                 break;
             case NEW_FINGERPRINT_ENROLLED:
                 // Intentional fall through
-            case PASSWORD:
-                mCancelButton.setText(R.string.cancel);
-                mSecondDialogButton.setText(R.string.ok);
-                mFingerprintContent.setVisibility(View.GONE);
-                mBackupContent.setVisibility(View.VISIBLE);
-                if (mStage == Stage.NEW_FINGERPRINT_ENROLLED) {
-                    mPasswordDescriptionTextView.setVisibility(View.GONE);
-                    mNewFingerprintEnrolledTextView.setVisibility(View.VISIBLE);
-                    mUseFingerprintFutureCheckBox.setVisibility(View.VISIBLE);
-                }
                 break;
         }
     }
@@ -248,7 +224,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
     public void onAuthenticated() {
         // Callback from FingerprintUiHelper. Let the activity know that authentication was
         // successful.
-        mActivity.onPurchased(true /* withFingerprint */, mCryptoObject);
+        mActivity.onLogin(true /* withFingerprint */, mCryptoObject);
         dismiss();
     }
 

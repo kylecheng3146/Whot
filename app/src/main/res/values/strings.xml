@@ -33,15 +33,15 @@
     <string name="new_fingerprint_enrolled_description">A new fingerprint was added to this device, so your password is required.</string>
     <string name="password_description">Enter your store password to continue</string>
     <string name="use_fingerprint_in_future">Use fingerprint in the future</string>
-    <string name="fingerprint_description">Confirm fingerprint to continue</string>
+    <string name="fingerprint_description">按壓您的指紋以登入</string>
     <string name="description_fingerprint_icon">Fingerprint icon</string>
-    <string name="fingerprint_hint">Touch sensor</string>
-    <string name="fingerprint_not_recognized">Fingerprint not recognized. Try again</string>
-    <string name="fingerprint_success">Fingerprint recognized</string>
-    <string name="sign_in">Sign in</string>
+    <string name="fingerprint_hint">指紋偵測中...</string>
+    <string name="fingerprint_not_recognized">辨識錯誤，請再嘗試一次</string>
+    <string name="fingerprint_success">辨識成功</string>
+    <string name="sign_in">登入</string>
     <string name="use_fingerprint_to_authenticate_key" >use_fingerprint_to_authenticate_key</string>
-    <string name="cancel">Cancel</string>
+    <string name="cancel">取消</string>
     <string name="use_password">Use password</string>
-    <string name="ok">OK</string>
+    <string name="ok">確認</string>
     <string name="purchase_done">Purchase successful</string>
 </resources>

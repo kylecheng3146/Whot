@@ -17,6 +17,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <Button
+            android:id="@+id/purchase_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/email_login_form"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="17dp"
+            android:background="@mipmap/ic_fp_40px"
+            android:padding="2dp"
+            android:textColor="#fff"
+            android:textSize="14sp" />
+
         <TextView
             android:id="@+id/purchase_button_not_invalidated_description"
             android:layout_width="wrap_content"
@@ -117,30 +129,6 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
                 facebook:com_facebook_login_text="使用Facebook登入" />
-
-            <Button
-                android:id="@+id/purchase_button"
-                android:layout_width="match_parent"
-                android:layout_height="25dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/button_style"
-                android:padding="2dp"
-                android:text="指紋"
-                android:textColor="#fff"
-                android:textSize="14sp" />
-
-            <Button
-                android:id="@+id/purchase_button_not_invalidated"
-                android:layout_width="match_parent"
-                android:layout_height="25dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/button_style"
-                android:padding="2dp"
-                android:text="指紋"
-                android:textColor="#fff"
-                android:textSize="14sp" />
 
         </LinearLayout>
     </RelativeLayout>

@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.security.keystore.KeyGenParameterSpec;
-import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -36,12 +35,10 @@ import com.facebook.login.widget.LoginButton;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.List;
 
@@ -50,7 +47,6 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -99,84 +95,11 @@ public class LoginActivity extends BaseActivity implements LoginView {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        try {
-            mKeyStore = KeyStore.getInstance("AndroidKeyStore");
-        } catch (KeyStoreException e) {
-            throw new RuntimeException("Failed to get an instance of KeyStore", e);
-        }
-        try {
-            mKeyGenerator = KeyGenerator
-                    .getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
-        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
-            throw new RuntimeException("Failed to get an instance of KeyGenerator", e);
-        }
-        Cipher defaultCipher;
-        Cipher cipherNotInvalidated;
-        try {
-            defaultCipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
-                    + KeyProperties.BLOCK_MODE_CBC + "/"
-                    + KeyProperties.ENCRYPTION_PADDING_PKCS7);
-            cipherNotInvalidated = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
-                    + KeyProperties.BLOCK_MODE_CBC + "/"
-                    + KeyProperties.ENCRYPTION_PADDING_PKCS7);
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-            throw new RuntimeException("Failed to get an instance of Cipher", e);
-        }
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-
-        KeyguardManager keyguardManager = getSystemService(KeyguardManager.class);
-        FingerprintManager fingerprintManager = getSystemService(FingerprintManager.class);
-        Button purchaseButton = findViewById(R.id.purchase_button);
-        Button purchaseButtonNotInvalidated = findViewById(R.id.purchase_button_not_invalidated);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            purchaseButtonNotInvalidated.setEnabled(true);
-            purchaseButtonNotInvalidated.setOnClickListener(
-                    new PurchaseButtonClickListener(cipherNotInvalidated,
-                            KEY_NAME_NOT_INVALIDATED));
-        } else {
-            // Hide the purchase button which uses a non-invalidated key
-            // if the app doesn't work on Android N preview
-            purchaseButtonNotInvalidated.setVisibility(View.GONE);
-            findViewById(R.id.purchase_button_not_invalidated_description).setVisibility(View.GONE);
-        }
-
-        if (!keyguardManager.isKeyguardSecure()) {
-            // Show a message that the user hasn't set up a fingerprint or lock screen.
-            Toast.makeText(this,
-                    "Secure lock screen hasn't set up.\n"
-                            + "Go to 'Settings -> Security -> Fingerprint' to set up a fingerprint",
-                    Toast.LENGTH_LONG).show();
-            purchaseButton.setEnabled(false);
-            purchaseButtonNotInvalidated.setEnabled(false);
-            return;
-        }
-
-        // Now the protection level of USE_FINGERPRINT permission is normal instead of dangerous.
-        // See http://developer.android.com/reference/android/Manifest.permission.html#USE_FINGERPRINT
-        // The line below prevents the false positive inspection from Android Studio
-        // noinspection ResourceType
-        if (!fingerprintManager.hasEnrolledFingerprints()) {
-            purchaseButton.setEnabled(false);
-            // This happens when no fingerprints are registered.
-            Toast.makeText(this,
-                    "Go to 'Settings -> Security -> Fingerprint' and register at least one" +
-                            " fingerprint",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-        createKey(DEFAULT_KEY_NAME, true);
-        createKey(KEY_NAME_NOT_INVALIDATED, false);
-        purchaseButton.setEnabled(true);
-        purchaseButton.setOnClickListener(
-                new PurchaseButtonClickListener(defaultCipher, DEFAULT_KEY_NAME));
-
-
         etEmail = findViewById(R.id.et_mail);
         etPassword = findViewById(R.id.et_password);
         etEmail.setText(SharedPreferenceUtils.getEmail(this));
 
+        initFingerPrint();
 
 //        LeetCodePractise.reverseString("hello");
         final AppDatabase db = Room.databaseBuilder(getApplicationContext(),
@@ -312,7 +235,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
      *                                         the app works on Android N developer preview.
      *
      */
-    @RequiresApi(api = Build.VERSION_CODES.M)
     public void createKey(String keyName, boolean invalidatedByBiometricEnrollment) {
         // The enrolling flow for fingerprint. This is where you ask the user to set up fingerprint
         // for your flow. Use of keys is necessary if you need to know if the set of
@@ -353,7 +275,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
      * @param withFingerprint {@code true} if the purchase was made by using a fingerprint
      * @param cryptoObject the Crypto object
      */
-    public void onPurchased(boolean withFingerprint,
+    public void onLogin(boolean withFingerprint,
                             @Nullable FingerprintManager.CryptoObject cryptoObject) {
         if (withFingerprint) {
             // If the user has authenticated with fingerprint, verify that using cryptography and
@@ -393,6 +315,71 @@ public class LoginActivity extends BaseActivity implements LoginView {
         }
     }
 
+    /**
+     * 建立指紋辨識
+     * */
+    private void initFingerPrint(){
+        try {
+            mKeyStore = KeyStore.getInstance("AndroidKeyStore");
+        } catch (KeyStoreException e) {
+            throw new RuntimeException("Failed to get an instance of KeyStore", e);
+        }
+        try {
+            mKeyGenerator = KeyGenerator
+                    .getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
+        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
+            throw new RuntimeException("Failed to get an instance of KeyGenerator", e);
+        }
+        Cipher defaultCipher;
+        Cipher cipherNotInvalidated;
+        try {
+            defaultCipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
+                    + KeyProperties.BLOCK_MODE_CBC + "/"
+                    + KeyProperties.ENCRYPTION_PADDING_PKCS7);
+            cipherNotInvalidated = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
+                    + KeyProperties.BLOCK_MODE_CBC + "/"
+                    + KeyProperties.ENCRYPTION_PADDING_PKCS7);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+            throw new RuntimeException("Failed to get an instance of Cipher", e);
+        }
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+
+        KeyguardManager keyguardManager = getSystemService(KeyguardManager.class);
+        FingerprintManager fingerprintManager = getSystemService(FingerprintManager.class);
+        Button purchaseButton = findViewById(R.id.purchase_button);
+
+        if (!keyguardManager.isKeyguardSecure()) {
+            // Show a message that the user hasn't set up a fingerprint or lock screen.
+            Toast.makeText(this,
+                    "Secure lock screen hasn't set up.\n"
+                            + "Go to 'Settings -> Security -> Fingerprint' to set up a fingerprint",
+                    Toast.LENGTH_LONG).show();
+            purchaseButton.setEnabled(false);
+            return;
+        }
+
+        // Now the protection level of USE_FINGERPRINT permission is normal instead of dangerous.
+        // See http://developer.android.com/reference/android/Manifest.permission.html#USE_FINGERPRINT
+        // The line below prevents the false positive inspection from Android Studio
+        // noinspection ResourceType
+        if (!fingerprintManager.hasEnrolledFingerprints()) {
+            purchaseButton.setEnabled(false);
+            // This happens when no fingerprints are registered.
+            Toast.makeText(this,
+                    "Go to 'Settings -> Security -> Fingerprint' and register at least one" +
+                            " fingerprint",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+        createKey(DEFAULT_KEY_NAME, true);
+        createKey(KEY_NAME_NOT_INVALIDATED, false);
+        purchaseButton.setEnabled(true);
+        purchaseButton.setOnClickListener(
+                new PurchaseButtonClickListener(defaultCipher, DEFAULT_KEY_NAME));
+
+    }
+
 
     private class PurchaseButtonClickListener implements View.OnClickListener {
 
@@ -411,7 +398,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
             // Set up the crypto object for later. The object will be authenticated by use
             // of the fingerprint.
-            if (initCipher(mCipher, mKeyName)) {
+            if (CommonUtils.initCipher(mKeyStore,mCipher, mKeyName)) {
 
                 // Show the fingerprint dialog. The user has the option to use the fingerprint with
                 // crypto, or you can fall back to using a server-side verified password.
@@ -441,30 +428,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
                         FingerprintAuthenticationDialogFragment.Stage.NEW_FINGERPRINT_ENROLLED);
                 fragment.show(getFragmentManager(), DIALOG_FRAGMENT_TAG);
             }
-        }
-    }
-
-    /**
-     * Initialize the {@link Cipher} instance with the created key in the
-     * {@link #createKey(String, boolean)} method.
-     *
-     * @param keyName the key name to init the cipher
-     * @return {@code true} if initialization is successful, {@code false} if the lock screen has
-     * been disabled or reset after the key was generated, or if a fingerprint got enrolled after
-     * the key was generated.
-     */
-    private boolean initCipher(Cipher cipher, String keyName) {
-        try {
-
-            mKeyStore.load(null);
-            SecretKey key = (SecretKey) mKeyStore.getKey(keyName, null);
-            cipher.init(Cipher.ENCRYPT_MODE, key);
-            return true;
-        } catch (KeyPermanentlyInvalidatedException e) {
-            return false;
-        } catch (KeyStoreException | CertificateException | UnrecoverableKeyException | IOException
-                | NoSuchAlgorithmException | InvalidKeyException e) {
-            throw new RuntimeException("Failed to init Cipher", e);
         }
     }
 }

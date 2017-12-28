@@ -7,16 +7,31 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyPermanentlyInvalidatedException;
+import android.security.keystore.KeyProperties;
+import android.support.annotation.RequiresApi;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
 
 import whot.what.hot.R;
 
@@ -120,6 +135,31 @@ public class CommonUtils {
             intent.putExtras(bundle);
         }
         context.startActivity(intent);
+    }
+
+    /**
+     * Initialize the {@link Cipher} instance with the created key in the
+     * {@link #createKey(String, boolean)} method.
+     *
+     * @param keyName the key name to init the cipher
+     * @return {@code true} if initialization is successful, {@code false} if the lock screen has
+     * been disabled or reset after the key was generated, or if a fingerprint got enrolled after
+     * the key was generated.
+     */
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static boolean initCipher(KeyStore mKeyStore, Cipher cipher, String keyName) {
+        try {
+
+            mKeyStore.load(null);
+            SecretKey key = (SecretKey) mKeyStore.getKey(keyName, null);
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+            return true;
+        } catch (KeyPermanentlyInvalidatedException e) {
+            return false;
+        } catch (KeyStoreException | CertificateException | UnrecoverableKeyException | IOException
+                | NoSuchAlgorithmException | InvalidKeyException e) {
+            throw new RuntimeException("Failed to init Cipher", e);
+        }
     }
 
 //    public static void fetchFacebookKeyHash(){
