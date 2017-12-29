@@ -22,7 +22,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -283,9 +282,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
             assert cryptoObject != null;
             tryEncrypt(cryptoObject.getCipher());
 
-        } else {
-            // Authentication happened with backup password. Just show the confirmation message.
-            showConfirmation(null);
         }
     }
 
@@ -296,22 +292,12 @@ public class LoginActivity extends BaseActivity implements LoginView {
     private void tryEncrypt(Cipher cipher) {
         try {
             byte[] encrypted = cipher.doFinal(SECRET_MESSAGE.getBytes());
-            showConfirmation(encrypted);
+            Base64.encodeToString(encrypted, 0 /* flags */);
+            CommonUtils.intentActivity(this, MainActivity.class);
         } catch (BadPaddingException | IllegalBlockSizeException e) {
             Toast.makeText(this, "Failed to encrypt the data with the generated key. "
                     + "Retry the purchase", Toast.LENGTH_LONG).show();
 //            Log.e(TAG, "Failed to encrypt the data with the generated key." + e.getMessage());
-        }
-    }
-
-    // Show confirmation, if fingerprint was used show crypto information.
-    private void showConfirmation(byte[] encrypted) {
-        findViewById(R.id.confirmation_message).setVisibility(View.VISIBLE);
-        if (encrypted != null) {
-            TextView v = findViewById(R.id.encrypted_message);
-            v.setVisibility(View.VISIBLE);
-            v.setText(Base64.encodeToString(encrypted, 0 /* flags */));
-            CommonUtils.intentActivity(this, MainActivity.class);
         }
     }
 
