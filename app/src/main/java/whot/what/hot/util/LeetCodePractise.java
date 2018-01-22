@@ -1,7 +1,9 @@
 package whot.what.hot.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /** LeetCode practise
@@ -215,5 +217,51 @@ public class LeetCodePractise {
         * done.
         * */
         return b == 0 ? a : getSum(a ^ b, (a & b) << 1);
+    }
+
+    /**
+     * 728. Self Dividing Numbers
+     * 算出區間的數字 分開後原數字%是否都為0
+     * 範例 128   128%1 128%2 128%8 都為0
+     * */
+    public static List<Integer> selfDividingNumbers(int left, int right) {
+        List<Integer>result = new ArrayList<>();
+        for(int i = left ; i<=right ; i++){
+            boolean isTrue = false;
+            for(char a : ("" + i).toCharArray()){
+                if(String.valueOf(i).contains("0"))break;
+                if(i % Character.getNumericValue(a) != 0){
+                    isTrue = false;
+                    break;
+                }else isTrue = true;
+            }
+            if(isTrue) result.add(i);
+        }
+        return  result;
+    }
+
+    /**
+     * 463. Island Perimeter
+     * example
+     * {0,1,0,0},
+     * {1,1,1,0},
+     * {0,1,0,0},
+     * {1,1,0,0},
+     * */
+    public static int islandPerimeter(int[][] grid) {
+        int count = 0;
+        //先取得總共有幾個排
+        for(int i=0;i<grid.length;i++){
+            //在取出目前
+            for(int j=0;j<grid[0].length;j++) {
+                if (grid[i][j] == 1) {
+                    count += 4;
+                    if (i > 0 && grid[i-1][j] == 1) count -= 2;
+                    if (j > 0 && grid[i][j-1] == 1) count -= 2;
+                }
+            }
+        }
+
+        return count;
     }
 }
