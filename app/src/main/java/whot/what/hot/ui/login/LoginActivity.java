@@ -24,13 +24,18 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -56,6 +61,7 @@ import whot.what.hot.base.BaseActivity;
 import whot.what.hot.ui.main.MainActivity;
 import whot.what.hot.util.CommonUtils;
 import whot.what.hot.util.FingerprintAuthenticationDialogFragment;
+import whot.what.hot.util.LeetCodePractise;
 import whot.what.hot.util.SharedPreferenceUtils;
 
 /**
@@ -99,8 +105,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
         etEmail.setText(SharedPreferenceUtils.getEmail(this));
 
         initFingerPrint();
-
-//        LeetCodePractise.reverseString("hello");
+        runLeetCode();
         final AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "user.db").build();
 
@@ -133,8 +138,14 @@ public class LoginActivity extends BaseActivity implements LoginView {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                CommonUtils.intentActivity(LoginActivity.this,MainActivity.class);
-                // App code
+                final AccessToken accessToken = loginResult.getAccessToken();
+
+                GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject user, GraphResponse graphResponse) {
+                        CommonUtils.intentActivity(LoginActivity.this,MainActivity.class);
+                    }
+                }).executeAsync();
             }
 
             @Override
@@ -335,6 +346,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
         FingerprintManager fingerprintManager = getSystemService(FingerprintManager.class);
         Button purchaseButton = findViewById(R.id.purchase_button);
 
+        assert keyguardManager != null;
         if (!keyguardManager.isKeyguardSecure()) {
             // Show a message that the user hasn't set up a fingerprint or lock screen.
             Toast.makeText(this,
@@ -348,6 +360,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
         // Now the protection level of USE_FINGERPRINT permission is normal instead of dangerous.
         // See http://developer.android.com/reference/android/Manifest.permission.html#USE_FINGERPRINT
         // The line below prevents the false positive inspection from Android Studio
+        assert fingerprintManager != null;
         // noinspection ResourceType
         if (!fingerprintManager.hasEnrolledFingerprints()) {
             purchaseButton.setEnabled(false);
@@ -362,17 +375,22 @@ public class LoginActivity extends BaseActivity implements LoginView {
         createKey(KEY_NAME_NOT_INVALIDATED, false);
         purchaseButton.setEnabled(true);
         purchaseButton.setOnClickListener(
-                new PurchaseButtonClickListener(defaultCipher, DEFAULT_KEY_NAME));
+                new FingerPrintClick(defaultCipher, DEFAULT_KEY_NAME));
 
     }
 
+    private void runLeetCode(){
+//        LeetCodePractise.moveZeroes(new int[]{0,1,0,3,2});
+//        LeetCodePractise.reverseString("hello");
+        LeetCodePractise.getSum(1,2);
+    }
 
-    private class PurchaseButtonClickListener implements View.OnClickListener {
+    private class FingerPrintClick implements View.OnClickListener {
 
         Cipher mCipher;
         String mKeyName;
 
-        PurchaseButtonClickListener(Cipher cipher, String keyName) {
+        FingerPrintClick(Cipher cipher, String keyName) {
             mCipher = cipher;
             mKeyName = keyName;
         }

@@ -21,7 +21,7 @@ public class LeetCodePractise {
     public static int hammingDistance(int x, int y) {
         /*
         先把x y 互斥或取值
-        ex: 1 = 00000001 ,4 = 00000100x
+        ex: 1 = 00000001 ,4 = 00000100
         算法：
           00000001
         = 00000100
@@ -154,4 +154,66 @@ public class LeetCodePractise {
         return a.equals(b) ? -1 : Math.max(a.length(), b.length());
     }
 
+    /**
+     * 283. Move Zeroes
+     * nums = [0, 1, 0, 3, 12], after calling your function, nums should be [1, 3, 12, 0, 0].
+     * */
+    public static void moveZeroes(int[] nums) {
+//        /*解法一，效率值比較低*/
+//        int nums_len = nums.length;
+//        int j = 0;
+//        for(int i = 0;i<nums_len;i++){
+//            /*先將0的寫入暫存，再將排序互換，互換後在將j+1往後依序比對*/
+//            if(nums[i] != 0){
+//                int temp = nums[j];
+//                nums[j] = nums[i];
+//                nums[i] = temp;
+//                j++;
+//            }
+//        }
+//        /*解法二*/
+//        int i = 0;
+//        int j = 0;
+//        int len = nums.length;
+//
+//        while (len > i) {
+//            if (nums[i] != 0) {
+//                int temp = nums[j];
+//                nums[j] = nums[i];
+//                nums[i] = temp;
+//                j++;
+//            }
+//            i++;
+//        }
+
+        /*解法三，先將數值不為0的都先移到前面*/
+        int index=0;
+
+        for (int i=0;i<nums.length;i++){
+            if (nums[i]!=0) nums[index++]=nums[i];
+        }
+        /*再將後面的參數設為0*/
+        while(index<nums.length){
+            nums[index++]=0;
+        }
+    }
+
+    /**
+     * 371. Sum of Two Integers
+     * 加總兩個參數，但不能使用+號
+     * */
+    public static int getSum(int a, int b) {
+        /*以7+3為例子
+        * 先進行互斥取值
+        * 7的二次方 = 00000111
+        * 3的二次方 = 00000011
+        *          = 00000100 = 4
+        * 第二步驟
+        * 將兩位數值做位元且運算
+        * 得到  00000011 在左移 變 00000110 = 6
+        * 6+4 = 10
+        * done.
+        * */
+        return b == 0 ? a : getSum(a ^ b, (a & b) << 1);
+    }
 }
