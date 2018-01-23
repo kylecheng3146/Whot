@@ -16,7 +16,6 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
@@ -385,8 +384,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
 //        LeetCodePractise.reverseString("hello");
 //        LeetCodePractise.getSum(1,2);
 //        LeetCodePractise.selfDividingNumbers(1,22);
-//        Log.i("TAG", ""+LeetCodePractise.islandPerimeter(new int[][]{ {0,1,0,0}, {1,1,1,0}, {0,1,0,0}, {1,1,0,0}}));
-        Log.i("TAG", ""+LeetCodePractise.singleNumber(new int[]{2,2,1}));
+//        LeetCodePractise.islandPerimeter(new int[][]{ {0,1,0,0}, {1,1,1,0}, {0,1,0,0}, {1,1,0,0}});
+//        LeetCodePractise.singleNumber(new int[]{2,2,1});
+        LeetCodePractise.detectCapitalUse("USA");
     }
 
     private class FingerPrintClick implements View.OnClickListener {

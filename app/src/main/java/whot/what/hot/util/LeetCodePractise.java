@@ -274,11 +274,27 @@ public class LeetCodePractise {
         int result = 0,i=0;
         for (int num : nums) {
             //前後檢查相符合的參數
-            if (!(i + 1 < nums.length && num == nums[i + 1]) && !(i - 1 >= 0 && num == nums[i - 1])) {
-                result = num;
-            }
+            if (!(i + 1 < nums.length && num == nums[i + 1]) && !(i - 1 >= 0 && num == nums[i - 1])) result = num;
             i++;
         }
         return result;
+    }
+
+    /**
+     * 520. Detect Capital
+     *
+     * */
+    public static boolean detectCapitalUse(String word) {
+
+        return true;
+    }
+
+    /**
+     * 258. Add Digits
+     * Given num = 38, the process is like: 3 + 8 = 11, 1 + 1 = 2. Since 2 has only one digit, return it.
+     * */
+    public int addDigits(int num) {
+        if(num ==0) return 0;
+        return num % 9 ==0 ?9:num % 9;
     }
 }
