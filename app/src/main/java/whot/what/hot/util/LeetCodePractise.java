@@ -261,7 +261,24 @@ public class LeetCodePractise {
                 }
             }
         }
-
         return count;
+    }
+
+    /**
+     * 136. Single Number
+     * 給一個整數陣列 nums, 裡面只有一個數字出現一次，其他都是出現兩次，找出那個孤單的數字。
+     * */
+    public static int singleNumber(int[] nums) {
+        //先進行由小到大的排序
+        Arrays.sort(nums);
+        int result = 0,i=0;
+        for (int num : nums) {
+            //前後檢查相符合的參數
+            if (!(i + 1 < nums.length && num == nums[i + 1]) && !(i - 1 >= 0 && num == nums[i - 1])) {
+                result = num;
+            }
+            i++;
+        }
+        return result;
     }
 }

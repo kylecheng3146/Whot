@@ -385,7 +385,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
 //        LeetCodePractise.reverseString("hello");
 //        LeetCodePractise.getSum(1,2);
 //        LeetCodePractise.selfDividingNumbers(1,22);
-        Log.i("TAG", ""+LeetCodePractise.islandPerimeter(new int[][]{ {0,1,0,0}, {1,1,1,0}, {0,1,0,0}, {1,1,0,0}}));
+//        Log.i("TAG", ""+LeetCodePractise.islandPerimeter(new int[][]{ {0,1,0,0}, {1,1,1,0}, {0,1,0,0}, {1,1,0,0}}));
+        Log.i("TAG", ""+LeetCodePractise.singleNumber(new int[]{2,2,1}));
     }
 
     private class FingerPrintClick implements View.OnClickListener {
