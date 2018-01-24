@@ -282,10 +282,29 @@ public class LeetCodePractise {
 
     /**
      * 520. Detect Capital
-     *
+     * All letters in this word are capitals, like "USA".
+     * All letters in this word are not capitals, like "leetcode".
+     * Only the first letter in this word is capital if it has more than one letter, like "Google".
      * */
     public static boolean detectCapitalUse(String word) {
-
+        String char_case = "";
+        for(int i=0;i<word.length();i++){
+            //先檢查第一個字母為大寫或者小寫
+            if( i == 0 && Character.isUpperCase(word.charAt(i))) char_case = "U";
+            if(i == 0 && Character.isLowerCase(word.charAt(i))) char_case = "L";
+            if(i>0){
+                switch (char_case){
+                    case "U":
+                        //2比3，3比4依序類推跟後面比對，不同者就回傳false
+                        if(i+1<word.length() && Character.isUpperCase(word.charAt(i)) != Character.isUpperCase(word.charAt(i+1))) return false;
+                        break;
+                    case "L":
+                        //只要不是小寫就回傳false
+                        if(!Character.isLowerCase(word.charAt(i))) return false;
+                        break;
+                }
+            }
+        }
         return true;
     }
 
