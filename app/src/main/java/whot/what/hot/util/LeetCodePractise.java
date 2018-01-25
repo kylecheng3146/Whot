@@ -316,4 +316,20 @@ public class LeetCodePractise {
         if(num ==0) return 0;
         return num % 9 ==0 ?9:num % 9;
     }
+
+    /**
+     * 383. Ransom Note
+     * You may assume that both strings contain only lowercase letters.
+     canConstruct("a", "b") -> false
+     canConstruct("aa", "ab") -> false
+     canConstruct("aa", "aab") -> true
+     對ransom字符串來說，每讀一個字母，則將對應位置的字母數目減一，
+     如果某個字母數目小於0了，則表明字母不夠用，從而返回false；否則返回true。
+     * */
+    public static boolean canConstruct(String ransomNote, String magazine) {
+        int[] cnt = new int[26];
+        for (int i = 0; i < magazine.length(); i++) cnt[magazine.charAt(i) - 'a']++;
+        for (int i = 0; i < ransomNote.length(); i++) if (--cnt[ransomNote.charAt(i) - 'a'] < 0) return false;
+        return true;
+    }
 }

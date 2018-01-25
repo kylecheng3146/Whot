@@ -386,7 +386,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
 //        LeetCodePractise.selfDividingNumbers(1,22);
 //        LeetCodePractise.islandPerimeter(new int[][]{ {0,1,0,0}, {1,1,1,0}, {0,1,0,0}, {1,1,0,0}});
 //        LeetCodePractise.singleNumber(new int[]{2,2,1});
-        LeetCodePractise.detectCapitalUse("USA");
+//        LeetCodePractise.detectCapitalUse("USA");
+
+        LeetCodePractise.canConstruct("aa", "aab");
     }
 
     private class FingerPrintClick implements View.OnClickListener {
