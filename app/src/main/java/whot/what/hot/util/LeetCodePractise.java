@@ -1,5 +1,8 @@
 package whot.what.hot.util;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -332,4 +335,26 @@ public class LeetCodePractise {
         for (int i = 0; i < ransomNote.length(); i++) if (--cnt[ransomNote.charAt(i) - 'a'] < 0) return false;
         return true;
     }
+
+    /**
+     * 760. Find Anagram Mappings
+     * A = [12, 28, 46, 32, 50]
+       B = [50, 12, 32, 46, 28]
+       We should return
+       [1, 4, 3, 2, 0]
+     * */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static int[] anagramMappings(int[] A, int[] B) {
+        int i  = 0, j = 0;
+        int[] result = new int[A.length];
+        while (i< A.length){
+            if(A[i] == B[j]){
+                result[i] = j;
+                i++;
+                j=0;
+            }else j++;
+        }
+        return result;
+    }
+
 }

@@ -387,8 +387,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
 //        LeetCodePractise.islandPerimeter(new int[][]{ {0,1,0,0}, {1,1,1,0}, {0,1,0,0}, {1,1,0,0}});
 //        LeetCodePractise.singleNumber(new int[]{2,2,1});
 //        LeetCodePractise.detectCapitalUse("USA");
-
-        LeetCodePractise.canConstruct("aa", "aab");
+//        LeetCodePractise.canConstruct("aa", "aab");
+        LeetCodePractise.anagramMappings(new int[]{12, 28, 46, 32, 50}, new int[]{50, 12, 32, 46, 28});
     }
 
     private class FingerPrintClick implements View.OnClickListener {
