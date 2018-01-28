@@ -357,4 +357,28 @@ public class LeetCodePractise {
         return result;
     }
 
+    /**
+     * 448. Find All Numbers Disappeared in an Array
+     * for example Input: [4,3,2,7,8,2,3,1]
+     * */
+    public static List<Integer> findDisappearedNumbers(int[] nums) {
+
+        List<Integer> result = new ArrayList<>();
+        int i = 0;
+        int j=1;
+        while(i<nums.length){
+            if(nums[Math.abs( nums[i])-1]>0){
+                nums[Math.abs( nums[i])-1] = -nums[Math.abs( nums[i])-1];
+            }
+            i++;
+        }
+        for(int num : nums){
+            if(num>0){
+                result.add(j);
+            }
+            ++j;
+        }
+        return result;
+    }
+
 }
