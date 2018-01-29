@@ -454,4 +454,25 @@ public class LeetCodePractise {
         }
         return true;
     }
+
+    /**
+     * 485. Max Consecutive Ones
+     * Input: [1,1,0,1,1,1]
+       Output: 3
+       Explanation: The first two digits or the last three digits are consecutive 1s.
+       The maximum number of consecutive 1s is 3.
+     *
+     * example data : 1,0,1,1,0,1
+     * */
+    public static int findMaxConsecutiveOnes(int[] nums) {
+        int result = 0,temp = 0;
+        for (int i : nums) {
+            if(i!=0) result += i;
+            else{
+                if(result>temp) temp = result;
+                result = 0;
+            }
+        }
+        return Math.max(temp,result);
+    }
 }
