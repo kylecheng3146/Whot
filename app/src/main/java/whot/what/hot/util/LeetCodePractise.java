@@ -381,4 +381,77 @@ public class LeetCodePractise {
         return result;
     }
 
+    /**
+     * 500. Keyboard Row
+     * Input: ["Hello", "Alaska", "Dad", "Peace"]
+     Output: ["Alaska", "Dad"]
+     * */
+    public static String[] findWords(String[] words) {
+        List<String> list = new ArrayList<>();
+        String q = "qwertyuiopQWERTYUIOP";
+        String a = "asdfghjklASDFGHJKL";
+        String z = "zxcvbnmZXCVBNM";
+        int i = 0;
+        while (i<words.length){
+            boolean isQContain = false;
+            boolean isAContain = false;
+            boolean isZContain = false;
+            char[] chars = words[i].toCharArray();
+            //逐一檢查字串是否都符合q列
+            for(char c :chars){
+                if(!q.contains(String.valueOf(c))){
+                    isQContain = true;
+                    break;
+                }
+            }
+            //如果皆符合就將字串寫入array list
+            if(!isQContain) list.add(words[i]);
+            //逐一檢查字串是否都符合z列
+            for(char c :chars){
+                if(!a.contains(String.valueOf(c))){
+                    isAContain = true;
+                    break;
+                }
+            }
+            if(!isAContain) list.add(words[i]);
+            //逐一檢查字串是否都符合z列
+            for(char c :chars){
+                if(!z.contains(String.valueOf(c))){
+                    isZContain = true;
+                    break;
+                }
+            }
+            //如果皆符合就將字串寫入array list
+            if(!isZContain) list.add(words[i]);
+            i++;
+        }
+        return list.toArray(new String[0]);
+    }
+
+    /**
+     * 766. Toeplitz Matrix
+     * Input: matrix = [[1,2,3,4],[5,1,2,3],[9,5,1,2]]
+     Output: True
+     Explanation:
+     1234
+     5123
+     9512
+     ------------------------------------------------------------------------------------------------------
+     In the above grid, the diagonals are "[9]", "[5, 5]", "[1, 1, 1]", "[2, 2, 2]", "[3, 3]", "[4]",
+     and in each diagonal all elements are the same, so the answer is True.
+     * */
+    public static boolean isToeplitzMatrix(int[][] matrix) {
+        int i = 0;
+        while (i<matrix.length){
+            int j = 0 ;
+            while (j<matrix[0].length) {
+                if(j+1==matrix[0].length) break;
+                if(i+1==matrix.length) break;
+                if(!(matrix[i][j] == matrix[i+1][j+1])) return false;
+                j++;
+            }
+            i++;
+        }
+        return true;
+    }
 }

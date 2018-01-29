@@ -388,7 +388,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
 //        LeetCodePractise.singleNumber(new int[]{2,2,1});
 //        LeetCodePractise.detectCapitalUse("USA");
 //        LeetCodePractise.canConstruct("aa", "aab");
-        LeetCodePractise.anagramMappings(new int[]{12, 28, 46, 32, 50}, new int[]{50, 12, 32, 46, 28});
+//        LeetCodePractise.anagramMappings(new int[]{12, 28, 46, 32, 50}, new int[]{50, 12, 32, 46, 28});
+        LeetCodePractise.isToeplitzMatrix(new int[][]{ {11,74,0,93},{40,11,74,7}});
     }
 
     private class FingerPrintClick implements View.OnClickListener {
