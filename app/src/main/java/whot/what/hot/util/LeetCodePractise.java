@@ -475,4 +475,30 @@ public class LeetCodePractise {
         }
         return Math.max(temp,result);
     }
+
+    /**
+     * 349. Intersection of Two Arrays
+     *
+     * */
+    public static int[] intersection(int[] nums1, int[] nums2) {
+        int i=0,j = 0,k=0,max = Math.max(nums1.length,nums2.length) ,min = Math.min(nums1.length,nums2.length);
+        boolean isnums1max = nums1.length>nums2.length;
+        List<Integer> temp = new ArrayList<>();
+        List<Integer> temp2 = new ArrayList<>();
+        while(i<max){
+            temp.add(isnums1max ?nums1[i]:nums2[i]);
+            i++;
+        }
+        while (j<min){
+            if(isnums1max) {
+                if(temp.contains(nums2[j]) && !temp2.contains(nums2[j])) temp2.add(nums2[j]);
+            }else{
+                if(temp.contains(nums1[j]) && !temp2.contains(nums1[j])) temp2.add(nums1[j]);
+            }
+            j++;
+        }
+        int[] result = new int[temp2.size()];
+        for(Integer num : temp2) result[k++] = num;
+        return result;
+    }
 }

@@ -390,7 +390,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
 //        LeetCodePractise.canConstruct("aa", "aab");
 //        LeetCodePractise.anagramMappings(new int[]{12, 28, 46, 32, 50}, new int[]{50, 12, 32, 46, 28});
 //        LeetCodePractise.isToeplitzMatrix(new int[][]{ {11,74,0,93},{40,11,74,7}});
-        LeetCodePractise.findMaxConsecutiveOnes(new int[]{1,0,1,1,0,1});
+//        LeetCodePractise.findMaxConsecutiveOnes(new int[]{1,0,1,1,0,1});
+        LeetCodePractise.intersection(new int[]{3,1,2},new int[]{1});
     }
 
     private class FingerPrintClick implements View.OnClickListener {
