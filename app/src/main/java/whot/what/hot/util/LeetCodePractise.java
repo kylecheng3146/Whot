@@ -501,4 +501,16 @@ public class LeetCodePractise {
         for(Integer num : temp2) result[k++] = num;
         return result;
     }
+
+    /**
+     * 171. Excel Sheet Column Number
+     * */
+    public static int titleToNumber(String s) {
+        int result = 0;
+        for(char c : s.toCharArray()){
+            result *= 26;
+            result += c-'A'+1;
+        }
+        return result;
+    }
 }
