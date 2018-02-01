@@ -539,4 +539,36 @@ public class LeetCodePractise {
         for(int i = 0 ; i< temp.length ; i++) if(temp[i] == 0) return i;
         return 0;
     }
+
+
+    /**
+     * 242. Valid Anagram
+     * For example,
+     s = "anagram", t = "nagaram", return true.
+     s = "rat", t = "car", return false.
+     * */
+    public boolean isAnagram(String s, String t) {
+        /*
+        solution 1
+        if(s.length() != t.length()) return false;
+        char[] char_s = s.toCharArray() , char_t = t.toCharArray();
+        Arrays.sort(char_s);
+        Arrays.sort(char_t);
+        int i = 0;
+        for(char c : char_s){
+            if (c != char_t[i]) return false;
+            i++;
+        }
+        return true;
+        */
+        if(s.length() == 0 && t.length() == 0) return true;
+        if(s.length() != t.length()) return false;
+        int[] temp = new int[25];
+        for(char c : s.toCharArray()) temp[c-'a'] +=1;
+        for(char c : t.toCharArray()){
+            temp[c-'a'] -=1;
+            if(temp[c-'a'] <0) return false;
+        }
+        return true;
+    }
 }
