@@ -16,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
@@ -392,7 +393,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
 //        LeetCodePractise.isToeplitzMatrix(new int[][]{ {11,74,0,93},{40,11,74,7}});
 //        LeetCodePractise.findMaxConsecutiveOnes(new int[]{1,0,1,1,0,1});
 //        LeetCodePractise.intersection(new int[]{3,1,2},new int[]{1});
-        LeetCodePractise.titleToNumber("AAA");
+//        LeetCodePractise.titleToNumber("AAA");
+        Log.i("TAG", ""+LeetCodePractise.missingNumber(new int[]{9,6,4,2,3,5,7,0,1}));
     }
 
     private class FingerPrintClick implements View.OnClickListener {

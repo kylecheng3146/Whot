@@ -504,6 +504,14 @@ public class LeetCodePractise {
 
     /**
      * 171. Excel Sheet Column Number
+     * For example:
+     A -> 1
+     B -> 2
+     C -> 3
+     ...
+     Z -> 26
+     AA -> 27
+     AB -> 28
      * */
     public static int titleToNumber(String s) {
         int result = 0;
@@ -512,5 +520,23 @@ public class LeetCodePractise {
             result += c-'A'+1;
         }
         return result;
+    }
+
+    /**
+     * 268. Missing Number
+     * Example 1
+
+     Input: [3,0,1]
+     Output: 2
+     Example 2
+
+     Input: [9,6,4,2,3,5,7,0,1]
+     Output:
+     * */
+    public static int missingNumber(int[] nums) {
+        int[] temp = new int[nums.length+1];
+        for (int num : nums) temp[num] = 1;
+        for(int i = 0 ; i< temp.length ; i++) if(temp[i] == 0) return i;
+        return 0;
     }
 }
