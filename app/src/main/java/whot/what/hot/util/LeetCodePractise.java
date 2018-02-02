@@ -272,6 +272,7 @@ public class LeetCodePractise {
      * 給一個整數陣列 nums, 裡面只有一個數字出現一次，其他都是出現兩次，找出那個孤單的數字。
      * */
     public static int singleNumber(int[] nums) {
+        /* solution 1
         //先進行由小到大的排序
         Arrays.sort(nums);
         int result = 0,i=0;
@@ -281,6 +282,12 @@ public class LeetCodePractise {
             i++;
         }
         return result;
+        */
+        int ans =0;
+        int len = nums.length;
+        for(int i=0;i!=len;i++)
+            ans ^= nums[i];
+        return ans;
     }
 
     /**
@@ -570,5 +577,22 @@ public class LeetCodePractise {
             if(temp[c-'a'] <0) return false;
         }
         return true;
+    }
+
+    /**
+     * 167. Two Sum II - Input array is sorted
+     * Input: numbers={2, 7, 11, 15}, target=9
+       Output: index1=1, index2=2
+     * */
+    public static int[] twoSum(int[] numbers, int target) {
+        int[] result = new int[2];
+        int j =numbers.length-1 , i =0;
+        while (numbers[i] + numbers[j] != target){
+            if (numbers[i] + numbers[j] < target ) i++;
+            else j--;
+        }
+        result[0] = i+1;
+        result[1] = j+1;
+        return result;
     }
 }

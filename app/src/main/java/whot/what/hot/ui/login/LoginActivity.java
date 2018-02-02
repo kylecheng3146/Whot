@@ -386,7 +386,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
 //        LeetCodePractise.getSum(1,2);
 //        LeetCodePractise.selfDividingNumbers(1,22);
 //        LeetCodePractise.islandPerimeter(new int[][]{ {0,1,0,0}, {1,1,1,0}, {0,1,0,0}, {1,1,0,0}});
-//        LeetCodePractise.singleNumber(new int[]{2,2,1});
+        LeetCodePractise.singleNumber(new int[]{2,2,1});
 //        LeetCodePractise.detectCapitalUse("USA");
 //        LeetCodePractise.canConstruct("aa", "aab");
 //        LeetCodePractise.anagramMappings(new int[]{12, 28, 46, 32, 50}, new int[]{50, 12, 32, 46, 28});
@@ -394,7 +394,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
 //        LeetCodePractise.findMaxConsecutiveOnes(new int[]{1,0,1,1,0,1});
 //        LeetCodePractise.intersection(new int[]{3,1,2},new int[]{1});
 //        LeetCodePractise.titleToNumber("AAA");
-        Log.i("TAG", ""+LeetCodePractise.missingNumber(new int[]{9,6,4,2,3,5,7,0,1}));
+//        Log.i("TAG", ""+LeetCodePractise.missingNumber(new int[]{9,6,4,2,3,5,7,0,1}));
+        Log.i("TAG", ""+LeetCodePractise.twoSum(new int[]{0,0,3,4},0));
     }
 
     private class FingerPrintClick implements View.OnClickListener {
@@ -424,13 +425,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
                 boolean useFingerprintPreference = mSharedPreferences
                         .getBoolean(getString(R.string.use_fingerprint_to_authenticate_key),
                                 true);
-                if (useFingerprintPreference) {
-                    fragment.setStage(
-                            FingerprintAuthenticationDialogFragment.Stage.FINGERPRINT);
-                } else {
-                    fragment.setStage(
-                            FingerprintAuthenticationDialogFragment.Stage.PASSWORD);
-                }
+                if (useFingerprintPreference) fragment.setStage(FingerprintAuthenticationDialogFragment.Stage.FINGERPRINT);
+                else fragment.setStage(FingerprintAuthenticationDialogFragment.Stage.PASSWORD);
                 fragment.show(getFragmentManager(), DIALOG_FRAGMENT_TAG);
             } else {
                 // This happens if the lock screen has been disabled or or a fingerprint got
