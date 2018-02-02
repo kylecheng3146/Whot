@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "172743591673",
+    "firebase_url": "https://neural-medium-194008.firebaseio.com",
+    "project_id": "neural-medium-194008",
+    "storage_bucket": "neural-medium-194008.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:172743591673:android:04014580c4f19fe9",
+        "android_client_info": {
+          "package_name": "Whot.what.hot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "172743591673-9d5s3uf66bn56ou8pmpija2fv2q7oqj6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvRsI10ZQDj5hYB0wsRlrbcJSvod2RvOg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
