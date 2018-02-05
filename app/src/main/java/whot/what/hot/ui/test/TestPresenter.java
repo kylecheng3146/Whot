@@ -7,6 +7,7 @@ import whot.what.hot.api.ApiServices;
 import whot.what.hot.base.BasePresenter;
 import whot.what.hot.data.AntModel;
 import whot.what.hot.data.GankModel;
+import whot.what.hot.data.InstagramModel;
 import whot.what.hot.data.MainModel;
 import whot.what.hot.data.WeatherDataModel;
 import whot.what.hot.http.RxManager;
@@ -137,6 +138,27 @@ public class TestPresenter extends BasePresenter<TestView> {
             @Override
             public void _onNext(AntModel model) {
                 mvpView.getAntResult(model);
+            }
+
+            @Override
+            public void _onError(String msg) {
+                mvpView.showMessage(msg);
+            }
+
+            @Override
+            public void _onCompleted() {
+                mvpView.hideLoading();
+                detachView();
+            }
+        });
+    }
+
+    void loadInstagramData(){
+        mvpView.showLoading();
+        RxSubscriber.getInstance().doSubscribe(apiServices.getInstagramGson("https://api.instagram.com/v1/users/self/?access_token=315272341.7fb3c50.8d63aaf6d07943238abac3a1b0866c16"), new RxManager<InstagramModel>() {
+            @Override
+            public void _onNext(InstagramModel model) {
+                mvpView.getInstagramResult(model);
             }
 
             @Override

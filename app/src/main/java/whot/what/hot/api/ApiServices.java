@@ -5,6 +5,7 @@ import java.util.Map;
 
 import whot.what.hot.data.AntModel;
 import whot.what.hot.data.GankModel;
+import whot.what.hot.data.InstagramModel;
 import whot.what.hot.data.MainModel;
 import whot.what.hot.data.WeatherDataModel;
 import okhttp3.ResponseBody;
@@ -32,6 +33,9 @@ public interface ApiServices {
 
     @GET("{fullUrl}")
     Observable<AntModel> getAntInfoWithGson(@Path(value = "fullUrl", encoded = true)  String fullUrl);
+
+    @GET("{fullUrl}")
+    Observable<InstagramModel> getInstagramGson(@Path(value = "fullUrl", encoded = true)  String fullUrl);
 
 
     @GET("onebox/weather/query?cityname=深圳")

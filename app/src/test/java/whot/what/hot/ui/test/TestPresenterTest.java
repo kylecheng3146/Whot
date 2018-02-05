@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 import whot.what.hot.api.ApiServices;
 import whot.what.hot.data.AntModel;
+import whot.what.hot.data.InstagramModel;
 import whot.what.hot.data.MainModel;
 import rx.Observable;
 
@@ -67,6 +68,17 @@ public class TestPresenterTest {
         verify(testView).getAntResult(captor.capture());
         antModel = captor.getValue();
         Assert.assertEquals("Ant",antModel.getName());
+    }
+
+    @Test
+    public void testInstagramResult() throws Exception {
+        InstagramModel antModel = new InstagramModel();
+        when(apiServices.getInstagramGson("https://api.instagram.com/v1/users/self/?access_token=315272341.7fb3c50.8d63aaf6d07943238abac3a1b0866c16")).thenReturn(Observable.just(antModel));
+        testPresenter.loadInstagramData();
+        ArgumentCaptor<InstagramModel> captor = ArgumentCaptor.forClass(InstagramModel.class);
+        verify(testView).getInstagramResult(captor.capture());
+        antModel = captor.getValue();
+        Assert.assertEquals("",antModel.getData().getFull_name());
     }
 
 }

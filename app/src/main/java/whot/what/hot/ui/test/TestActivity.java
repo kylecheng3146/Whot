@@ -23,6 +23,7 @@ import whot.what.hot.api.ApiServices;
 import whot.what.hot.base.BaseActivity;
 import whot.what.hot.data.AntModel;
 import whot.what.hot.data.GankModel;
+import whot.what.hot.data.InstagramModel;
 import whot.what.hot.data.MainModel;
 import whot.what.hot.data.WeatherDataModel;
 
@@ -150,6 +151,11 @@ public class TestActivity extends BaseActivity implements TestView,View.OnClickL
 
     @Override
     public void getAntResult(AntModel bean) {
+
+    }
+
+    @Override
+    public void getInstagramResult(InstagramModel bean) {
 
     }
 
