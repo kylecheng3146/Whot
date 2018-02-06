@@ -14,7 +14,7 @@ public class BasePresenter<V> {
     public void attachView(V mvpView) {
         this.mvpView = mvpView;
         //指定url
-        apiServices = RetrofitManager.getDefault("http://211.22.242.13:8164");
+        apiServices = RetrofitManager.getDefault("https://api.instagram.com/");
     }
 
     public void detachView() {

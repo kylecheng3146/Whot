@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -23,23 +24,31 @@ import whot.what.hot.api.ApiServices;
 import whot.what.hot.base.BaseActivity;
 import whot.what.hot.data.AntModel;
 import whot.what.hot.data.GankModel;
-import whot.what.hot.data.InstagramModel;
+import whot.what.hot.data.InstagramTagModel;
 import whot.what.hot.data.MainModel;
 import whot.what.hot.data.WeatherDataModel;
 
 import static android.util.Log.i;
 
-public class TestActivity extends BaseActivity implements TestView,View.OnClickListener {
+public class TestActivity extends BaseActivity implements TestView, View.OnClickListener {
 
 
-    @BindView(R.id.tv_result) TextView tvResult;
-    @BindView(R.id.btn_retrofit_get) Button btnRetrofitGet;
-    @BindView(R.id.btn_retrofit_get_gson) Button btnRetrofitGetGson;
-    @BindView(R.id.btn_retrofit_get_dym) Button btnRetrofitGetDym;
-    @BindView(R.id.btn_retrofit_parameter) Button btnRetrofitParameter;
-    @BindView(R.id.btn_retrofit_combine) Button btnRetrofitCombine;
-    @BindView(R.id.btn_retrofit_post) Button btnRetrofitPost;
-    @BindView(R.id.btn_retrofit_rxjava) Button btnRetrofitRxjava;
+    @BindView(R.id.tv_result)
+    TextView tvResult;
+    @BindView(R.id.btn_retrofit_get)
+    Button btnRetrofitGet;
+    @BindView(R.id.btn_retrofit_get_gson)
+    Button btnRetrofitGetGson;
+    @BindView(R.id.btn_retrofit_get_dym)
+    Button btnRetrofitGetDym;
+    @BindView(R.id.btn_retrofit_parameter)
+    Button btnRetrofitParameter;
+    @BindView(R.id.btn_retrofit_combine)
+    Button btnRetrofitCombine;
+    @BindView(R.id.btn_retrofit_post)
+    Button btnRetrofitPost;
+    @BindView(R.id.btn_retrofit_rxjava)
+    Button btnRetrofitRxjava;
 
     private TestPresenter presenter;
     HashMap<String, String> hashMap = new HashMap<>();
@@ -48,6 +57,7 @@ public class TestActivity extends BaseActivity implements TestView,View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
+        ButterKnife.bind(this);
 
         btnRetrofitGet.setOnClickListener(this);
         btnRetrofitGetGson.setOnClickListener(this);
@@ -79,6 +89,7 @@ public class TestActivity extends BaseActivity implements TestView,View.OnClickL
                             e.printStackTrace();
                         }
                     }
+
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         Log.i("TAG", "@@@@");
@@ -155,7 +166,7 @@ public class TestActivity extends BaseActivity implements TestView,View.OnClickL
     }
 
     @Override
-    public void getInstagramResult(InstagramModel bean) {
+    public void getInstagramResult(InstagramTagModel bean) {
 
     }
 
@@ -201,6 +212,13 @@ public class TestActivity extends BaseActivity implements TestView,View.OnClickL
     public void onRetrofitParameterClick() {
         presenter = new TestPresenter(this);
         presenter.loadDataByRetrofitParameter();
+    }
+
+    @OnClick(R.id.btn_retrofit_instagram)
+    @Override
+    public void onInstagramClick() {
+        presenter = new TestPresenter(this);
+        presenter.loadInstagramData();
     }
 
     @Override

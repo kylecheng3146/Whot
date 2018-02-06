@@ -3,18 +3,18 @@ package whot.what.hot.ui.test;
 import java.util.HashMap;
 import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import whot.what.hot.api.ApiServices;
 import whot.what.hot.base.BasePresenter;
 import whot.what.hot.data.AntModel;
 import whot.what.hot.data.GankModel;
-import whot.what.hot.data.InstagramModel;
+import whot.what.hot.data.InstagramTagModel;
 import whot.what.hot.data.MainModel;
 import whot.what.hot.data.WeatherDataModel;
 import whot.what.hot.http.RxManager;
 import whot.what.hot.http.RxSubscriber;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * 處理 main 業務邏輯
@@ -155,9 +155,10 @@ public class TestPresenter extends BasePresenter<TestView> {
 
     void loadInstagramData(){
         mvpView.showLoading();
-        RxSubscriber.getInstance().doSubscribe(apiServices.getInstagramGson("https://api.instagram.com/v1/users/self/?access_token=315272341.7fb3c50.8d63aaf6d07943238abac3a1b0866c16"), new RxManager<InstagramModel>() {
+        RxSubscriber.getInstance().doSubscribe(apiServices.getInstagramGson("v1/tags/tainan/media/recent?access_token=315272341.7fb3c50.8d63aaf6d07943238abac3a1b0866c16"), new RxManager<InstagramTagModel>() {
             @Override
-            public void _onNext(InstagramModel model) {
+            public void _onNext(InstagramTagModel model) {
+                mvpView.showMessage(""+model.getData().get(0).getImages().getThumbnail().getUrl());
                 mvpView.getInstagramResult(model);
             }
 

@@ -3,7 +3,7 @@ package whot.what.hot.ui.test;
 import whot.what.hot.base.BaseView;
 import whot.what.hot.data.AntModel;
 import whot.what.hot.data.GankModel;
-import whot.what.hot.data.InstagramModel;
+import whot.what.hot.data.InstagramTagModel;
 import whot.what.hot.data.MainModel;
 
 /** MAIN VIEW LOGIC
@@ -20,7 +20,7 @@ public interface TestView extends BaseView {
 
     void getAntResult(AntModel bean);
 
-    void getInstagramResult(InstagramModel bean);
+    void getInstagramResult(InstagramTagModel bean);
 
     void onRxJavaClick();
 
@@ -29,4 +29,5 @@ public interface TestView extends BaseView {
     void onRetrofitCombineClick();
 
     void onRetrofitParameterClick();
+    void onInstagramClick();
 }

@@ -3,11 +3,6 @@ package whot.what.hot.api;
 import java.util.HashMap;
 import java.util.Map;
 
-import whot.what.hot.data.AntModel;
-import whot.what.hot.data.GankModel;
-import whot.what.hot.data.InstagramModel;
-import whot.what.hot.data.MainModel;
-import whot.what.hot.data.WeatherDataModel;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -18,6 +13,11 @@ import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import retrofit2.http.Url;
 import rx.Observable;
+import whot.what.hot.data.AntModel;
+import whot.what.hot.data.GankModel;
+import whot.what.hot.data.InstagramTagModel;
+import whot.what.hot.data.MainModel;
+import whot.what.hot.data.WeatherDataModel;
 
 /**
  * Created by sapido on 21/09/2017.
@@ -34,9 +34,8 @@ public interface ApiServices {
     @GET("{fullUrl}")
     Observable<AntModel> getAntInfoWithGson(@Path(value = "fullUrl", encoded = true)  String fullUrl);
 
-    @GET("{fullUrl}")
-    Observable<InstagramModel> getInstagramGson(@Path(value = "fullUrl", encoded = true)  String fullUrl);
-
+    @GET
+    Observable<InstagramTagModel> getInstagramGson(@Url String URL);
 
     @GET("onebox/weather/query?cityname=深圳")
     Call<WeatherDataModel> getWeather(@Query("key") String key);
