@@ -624,23 +624,40 @@ public class LeetCodePractise {
      * */
     public static int majorityElement(int[] nums) {
         Arrays.sort(nums);
-        int temp_count = 0, temp = 0,result = 0;
-        if(nums.length==1) return nums[0];
-        for(int i = 0 ; i<nums.length;i++){
-            if(i+1 == nums.length){
-                if(temp_count>temp) result = nums[i];
+        int temp_count = 0, temp = 0, result = 0;
+        if (nums.length == 1) return nums[0];
+        for (int i = 0; i < nums.length; i++) {
+            if (i + 1 == nums.length) {
+                if (temp_count > temp) result = nums[i];
                 break;
             }
-            if(nums[i] == nums[i+1]) temp_count ++;
-            else{
-                if(temp_count>temp){
+            if (nums[i] == nums[i + 1]) temp_count++;
+            else {
+                if (temp_count > temp) {
                     temp = temp_count;
                     result = nums[i];
                 }
                 temp_count = 0;
             }
         }
-        return  result;
+        return result;
     }
 
+    /**
+     * 628. Maximum Product of Three Numbers
+     * Given an integer array, find three numbers whose product is maximum and output the maximum product.
+     Example 1:
+     Input: [1,2,3]
+     Output: 6
+     Example 2:
+     Input: [1,2,3,4]
+     Output: 24
+     * */
+    public static int maximumProduct(int[] nums) {
+        Arrays.sort(nums);
+        //One of the Three Numbers is the maximum value in the array.
+        int a = nums[nums.length - 1] * nums[nums.length - 2] * nums[nums.length - 3];
+        int b = nums[0] * nums[1] * nums[nums.length - 1];
+        return Math.max(a,b);
+    }
 }

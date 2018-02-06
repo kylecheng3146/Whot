@@ -397,7 +397,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
 //        Log.i("TAG", ""+LeetCodePractise.missingNumber(new int[]{9,6,4,2,3,5,7,0,1}));
 //        Log.i("TAG", ""+LeetCodePractise.twoSum(new int[]{0,0,3,4},0));
 //        Log.i("TAG", ""+LeetCodePractise.firstUniqChar("cc"));
-        Log.i("TAG", ""+LeetCodePractise.majorityElement(new int[]{2,2}));
+//        Log.i("TAG", ""+LeetCodePractise.majorityElement(new int[]{1}));
+        Log.i("TAG", ""+LeetCodePractise.maximumProduct(new int[]{-4,-3,-2,-1,60}));
     }
 
     private class FingerPrintClick implements View.OnClickListener {
