@@ -660,4 +660,14 @@ public class LeetCodePractise {
         int b = nums[0] * nums[1] * nums[nums.length - 1];
         return Math.max(a,b);
     }
+
+    /**
+     * 217. Contains Duplicate
+     * 找出陣列是否有無重複數值
+     * */
+    public static boolean containsDuplicate(int[] nums) {
+        Arrays.sort(nums);
+        for(int i=0;i<nums.length-1;i++) if(nums[i] == nums[i+1]) return true;
+        return false;
+    }
 }
