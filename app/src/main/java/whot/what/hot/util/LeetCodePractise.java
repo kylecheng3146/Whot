@@ -606,7 +606,6 @@ public class LeetCodePractise {
      return 2.
      * */
     public static int firstUniqChar(String s) {
-        if("".equals(s))return -1;
         int[] chars = new int[26];
         for(char c : s.toCharArray()) chars[c -'a']++;
         int result = 0;
@@ -618,4 +617,30 @@ public class LeetCodePractise {
         }
         return -1;
     }
+
+    /**
+     * 169. Majority Element
+     *
+     * */
+    public static int majorityElement(int[] nums) {
+        Arrays.sort(nums);
+        int temp_count = 0, temp = 0,result = 0;
+        if(nums.length==1) return nums[0];
+        for(int i = 0 ; i<nums.length;i++){
+            if(i+1 == nums.length){
+                if(temp_count>temp) result = nums[i];
+                break;
+            }
+            if(nums[i] == nums[i+1]) temp_count ++;
+            else{
+                if(temp_count>temp){
+                    temp = temp_count;
+                    result = nums[i];
+                }
+                temp_count = 0;
+            }
+        }
+        return  result;
+    }
+
 }
