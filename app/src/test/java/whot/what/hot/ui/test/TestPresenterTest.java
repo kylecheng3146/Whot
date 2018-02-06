@@ -7,11 +7,11 @@ import org.mockito.ArgumentCaptor;
 
 import java.util.HashMap;
 
+import rx.Observable;
 import whot.what.hot.api.ApiServices;
 import whot.what.hot.data.AntModel;
-import whot.what.hot.data.InstagramModel;
+import whot.what.hot.data.InstagramTagModel;
 import whot.what.hot.data.MainModel;
-import rx.Observable;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -72,13 +72,16 @@ public class TestPresenterTest {
 
     @Test
     public void testInstagramResult() throws Exception {
-        InstagramModel antModel = new InstagramModel();
-        when(apiServices.getInstagramGson("https://api.instagram.com/v1/users/self/?access_token=315272341.7fb3c50.8d63aaf6d07943238abac3a1b0866c16")).thenReturn(Observable.just(antModel));
+        InstagramTagModel instagram = new InstagramTagModel();
+        when(apiServices.getInstagramGson("v1/tags/tainan/media/recent?access_token=315272341.7fb3c50.8d63aaf6d07943238abac3a1b0866c16")).thenReturn(Observable.just(instagram));
         testPresenter.loadInstagramData();
-        ArgumentCaptor<InstagramModel> captor = ArgumentCaptor.forClass(InstagramModel.class);
+
+        ArgumentCaptor<InstagramTagModel> captor = ArgumentCaptor.forClass(InstagramTagModel.class);
+
         verify(testView).getInstagramResult(captor.capture());
-        antModel = captor.getValue();
-        Assert.assertEquals("",antModel.getData().getFull_name());
+        instagram = captor.getValue();
+
+        Assert.assertEquals(200,instagram.getMeta().getCode());
     }
 
 }
