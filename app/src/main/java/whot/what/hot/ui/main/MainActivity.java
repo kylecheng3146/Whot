@@ -14,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
@@ -32,14 +34,13 @@ public class MainActivity extends BaseActivity
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.fab)
-        FloatingActionButton fab;
+    FloatingActionButton fab;
     @BindView(R.id.nav_view)
     NavigationView navView;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
     @BindView(R.id.rv_list)
     RecyclerView rvList;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +60,8 @@ public class MainActivity extends BaseActivity
         //讀取instagram tag 資訊
         MainPresenter presenter = new MainPresenter(this);
         presenter.loadInstagramData();
+
+        initNavHeaderView(navView.inflateHeaderView(R.layout.nav_header_main));
     }
 
     @Override
@@ -122,7 +125,7 @@ public class MainActivity extends BaseActivity
         //在這邊以hash tag作為標頭
         list.add(new MainSectionEntity(true, "#tainan", true));
         //將instagram 資料加入到content之中
-        for(int i = 0;i<bean.getData().size();i++){
+        for (int i = 0; i < bean.getData().size(); i++) {
             list.add(new MainSectionEntity(bean.getData().get(i)));
         }
         //spanCount 設定每行幾個項目
@@ -133,16 +136,27 @@ public class MainActivity extends BaseActivity
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 MainSectionEntity mainSectionEntity = list.get(position);
-                    showMessage(mainSectionEntity.t.getLocation().getName());
+                showMessage(mainSectionEntity.t.getLocation().getName());
             }
         });
         //標頭按下more的事件
         mainAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                showMessage("onItemChildClick"+ position);
+                showMessage("onItemChildClick" + position);
             }
         });
         rvList.setAdapter(mainAdapter);
+    }
+
+    /**
+     * 初始化nav header view 取得裡面的元件
+     * @param view [nav header view]
+     * */
+    private void initNavHeaderView(View view){
+        ImageView ivPicture = view.findViewById(R.id.iv_picture);
+        TextView tvName = view.findViewById(R.id.tv_name);
+//        ivPicture.setImageResource();
+        tvName.setText("鄭凱凱");
     }
 }
