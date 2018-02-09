@@ -17,8 +17,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 
+import org.json.JSONObject;
+
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +68,6 @@ public class MainActivity extends BaseActivity
         //讀取instagram tag 資訊
         MainPresenter presenter = new MainPresenter(this);
         presenter.loadInstagramData();
-
         initNavHeaderView(navView.inflateHeaderView(R.layout.nav_header_main));
     }
 
@@ -156,7 +163,28 @@ public class MainActivity extends BaseActivity
     private void initNavHeaderView(View view){
         ImageView ivPicture = view.findViewById(R.id.iv_picture);
         TextView tvName = view.findViewById(R.id.tv_name);
-//        ivPicture.setImageResource();
-        tvName.setText("鄭凱凱");
+
+
+        Bundle params = new Bundle();
+        params.putString("fields", "id,email,gender,cover,picture.type(large)");
+        new GraphRequest(AccessToken.getCurrentAccessToken(), "me", params, HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    @Override
+                    public void onCompleted(GraphResponse response) {
+                        if (response != null) {
+                            try {
+                                JSONObject data = response.getJSONObject();
+                                if (data.has("picture")) {
+                                    URL url = new URL(data.getJSONObject("picture").getJSONObject("data").getString("url"));
+                                    Glide.with(MainActivity.this).load(url).into(ivPicture);
+                                    tvName.setText(data.getString("id"));
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }).executeAsync();
+
     }
 }

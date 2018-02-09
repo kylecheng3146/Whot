@@ -18,7 +18,7 @@
         android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/purchase_button"
+            android:id="@+id/btn_fringerprint"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_below="@+id/email_login_form"
@@ -28,42 +28,6 @@
             android:padding="2dp"
             android:textColor="#fff"
             android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/purchase_button_not_invalidated_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:paddingEnd="16dp"
-            android:paddingStart="16dp"
-            android:text="@string/purchase_done"
-            android:textAppearance="@android:style/TextAppearance.Material.Body2"
-            android:textColor="?android:attr/colorAccent"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/encrypted_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:paddingEnd="16dp"
-            android:paddingStart="16dp"
-            android:text="@string/purchase_done"
-            android:textAppearance="@android:style/TextAppearance.Material.Body2"
-            android:textColor="?android:attr/colorAccent"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/confirmation_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:paddingEnd="16dp"
-            android:paddingStart="16dp"
-            android:text="@string/purchase_done"
-            android:textAppearance="@android:style/TextAppearance.Material.Body2"
-            android:textColor="?android:attr/colorAccent"
-            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/email_login_form"

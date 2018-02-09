@@ -16,7 +16,6 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
@@ -62,7 +61,6 @@ import whot.what.hot.base.BaseActivity;
 import whot.what.hot.ui.main.MainActivity;
 import whot.what.hot.util.CommonUtils;
 import whot.what.hot.util.FingerprintAuthenticationDialogFragment;
-import whot.what.hot.util.LeetCodePractise;
 import whot.what.hot.util.SharedPreferenceUtils;
 
 /**
@@ -72,25 +70,30 @@ import whot.what.hot.util.SharedPreferenceUtils;
 public class LoginActivity extends BaseActivity implements LoginView {
 
     // UI references.
-    @BindView(R.id.btn_login) Button btnLogin;
-    @BindView(R.id.email_login_form) LinearLayout emailLoginForm;
+    @BindView(R.id.email_login_form)
+    LinearLayout emailLoginForm;
+    @BindView(R.id.btn_fringerprint)
+    Button btnFringerprint;
+    @BindView(R.id.et_mail)
+    AutoCompleteTextView etMail;
+    @BindView(R.id.et_password)
+    AutoCompleteTextView etPassword;
+    @BindView(R.id.btn_login)
+    Button btnLogin;
+    @BindView(R.id.login_button)
+    LoginButton loginButton;
 
-    private AutoCompleteTextView etEmail,etPassword;
     private LoginPresenter presenter;
-
     private LoginEntity loginEntity;
     private LoginDao loginDao;
     CallbackManager callbackManager;
     private SharedPreferences mSharedPreferences;
-
     private static final String DIALOG_FRAGMENT_TAG = "myFragment";
     private static final String SECRET_MESSAGE = "Very secret message";
     private static final String KEY_NAME_NOT_INVALIDATED = "key_not_invalidated";
     static final String DEFAULT_KEY_NAME = "default_key";
-
     private KeyStore mKeyStore;
     private KeyGenerator mKeyGenerator;
-
 
     @SuppressLint("StaticFieldLeak")
     @Override
@@ -101,9 +104,12 @@ public class LoginActivity extends BaseActivity implements LoginView {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        etEmail = findViewById(R.id.et_mail);
         etPassword = findViewById(R.id.et_password);
-        etEmail.setText(SharedPreferenceUtils.getEmail(this));
+        etMail.setText(SharedPreferenceUtils.getEmail(this));
+
+        //檢查facebook是否已經登入
+        if (CommonUtils.isLoggedIn())
+            CommonUtils.intentActivity(LoginActivity.this, MainActivity.class);
 
         initFingerPrint();
         runLeetCode();
@@ -121,16 +127,17 @@ public class LoginActivity extends BaseActivity implements LoginView {
             @Override
             protected void onPostExecute(List<LoginEntity> usersData) {
                 //判斷資資料是否存在後在寫入ArrayAdapter儲存
-                if (usersData.size()>0) {
+                if (usersData.size() > 0) {
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(LoginActivity.this, android.R.layout.simple_dropdown_item_1line);
-                    for(LoginEntity value: usersData){
+                    for (LoginEntity value : usersData) {
                         adapter.add(value.getEmail());
                     }
-                    etEmail.setThreshold(1);//will start working from first character
-                    etEmail.setAdapter(adapter);//setting the adapter data into the
+                    etMail.setThreshold(1);//will start working from first character
+                    etMail.setAdapter(adapter);//setting the adapter data into the
                 }
             }
         }.execute();
+
 
         callbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = findViewById(R.id.login_button);
@@ -144,7 +151,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
                 GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject user, GraphResponse graphResponse) {
-                        CommonUtils.intentActivity(LoginActivity.this,MainActivity.class);
+                        CommonUtils.intentActivity(LoginActivity.this, MainActivity.class);
                     }
                 }).executeAsync();
             }
@@ -167,23 +174,23 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
         View focusView;
         // Reset errors.
-        etEmail.setError(null);
+        etMail.setError(null);
         etPassword.setError(null);
 
         // Store values at the time of the login attempt.
-        final String email = etEmail.getText().toString();
+        final String email = etMail.getText().toString();
         String password = etPassword.getText().toString();
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
-            etEmail.setError(getString(R.string.error_field_required));
-            focusView = etEmail;
+            etMail.setError(getString(R.string.error_field_required));
+            focusView = etMail;
             focusView.requestFocus();
             return;
         }
         // Check for a valid email rule
         if (!CommonUtils.isEmailValid(email)) {
-            etEmail.setError(getString(R.string.error_invalid_email));
-            focusView = etEmail;
+            etMail.setError(getString(R.string.error_invalid_email));
+            focusView = etMail;
             focusView.requestFocus();
             return;
         }
@@ -210,10 +217,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
         }.start();
 
         //紀錄登入的電子郵件到SharedPreference後跳轉頁面到首頁
-        SharedPreferenceUtils.setEmail(this,email);
+        SharedPreferenceUtils.setEmail(this, email);
         CommonUtils.intentActivity(this, MainActivity.class);
 //        presenter = new LoginPresenter(this);
-
     }
 
     @OnEditorAction(R.id.et_password)
@@ -236,7 +242,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
      * Creates a symmetric key in the Android Key Store which can only be used after the user has
      * authenticated with fingerprint.
      *
-     * @param keyName the name of the key to be created
+     * @param keyName                          the name of the key to be created
      * @param invalidatedByBiometricEnrollment if {@code false} is passed, the created key will not
      *                                         be invalidated even if a new fingerprint is enrolled.
      *                                         The default value is {@code true}, so passing
@@ -244,7 +250,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
      *                                         (the key will be invalidated if a new fingerprint is
      *                                         enrolled.). Note that this parameter is only valid if
      *                                         the app works on Android N developer preview.
-     *
      */
     public void createKey(String keyName, boolean invalidatedByBiometricEnrollment) {
         // The enrolling flow for fingerprint. This is where you ask the user to set up fingerprint
@@ -284,10 +289,10 @@ public class LoginActivity extends BaseActivity implements LoginView {
      * Proceed the purchase operation
      *
      * @param withFingerprint {@code true} if the purchase was made by using a fingerprint
-     * @param cryptoObject the Crypto object
+     * @param cryptoObject    the Crypto object
      */
     public void onLogin(boolean withFingerprint,
-                            @Nullable FingerprintManager.CryptoObject cryptoObject) {
+                        @Nullable FingerprintManager.CryptoObject cryptoObject) {
         if (withFingerprint) {
             // If the user has authenticated with fingerprint, verify that using cryptography and
             // then show the confirmation message.
@@ -315,8 +320,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     /**
      * 建立指紋辨識
-     * */
-    private void initFingerPrint(){
+     */
+    private void initFingerPrint() {
         try {
             mKeyStore = KeyStore.getInstance("AndroidKeyStore");
         } catch (KeyStoreException e) {
@@ -345,8 +350,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
         KeyguardManager keyguardManager = getSystemService(KeyguardManager.class);
         FingerprintManager fingerprintManager = getSystemService(FingerprintManager.class);
-        Button purchaseButton = findViewById(R.id.purchase_button);
-
         assert keyguardManager != null;
         if (!keyguardManager.isKeyguardSecure()) {
             // Show a message that the user hasn't set up a fingerprint or lock screen.
@@ -354,7 +357,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
                     "Secure lock screen hasn't set up.\n"
                             + "Go to 'Settings -> Security -> Fingerprint' to set up a fingerprint",
                     Toast.LENGTH_LONG).show();
-            purchaseButton.setEnabled(false);
+            btnFringerprint.setEnabled(false);
             return;
         }
 
@@ -364,7 +367,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
         assert fingerprintManager != null;
         // noinspection ResourceType
         if (!fingerprintManager.hasEnrolledFingerprints()) {
-            purchaseButton.setEnabled(false);
+            btnFringerprint.setEnabled(false);
             // This happens when no fingerprints are registered.
             Toast.makeText(this,
                     "Go to 'Settings -> Security -> Fingerprint' and register at least one" +
@@ -374,13 +377,13 @@ public class LoginActivity extends BaseActivity implements LoginView {
         }
         createKey(DEFAULT_KEY_NAME, true);
         createKey(KEY_NAME_NOT_INVALIDATED, false);
-        purchaseButton.setEnabled(true);
-        purchaseButton.setOnClickListener(
+        btnFringerprint.setEnabled(true);
+        btnFringerprint.setOnClickListener(
                 new FingerPrintClick(defaultCipher, DEFAULT_KEY_NAME));
 
     }
 
-    private void runLeetCode(){
+    private void runLeetCode() {
 //        LeetCodePractise.moveZeroes(new int[]{0,1,0,3,2});
 //        LeetCodePractise.reverseString("hello");
 //        LeetCodePractise.getSum(1,2);
@@ -398,8 +401,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
 //        Log.i("TAG", ""+LeetCodePractise.twoSum(new int[]{0,0,3,4},0));
 //        Log.i("TAG", ""+LeetCodePractise.firstUniqChar("cc"));
 //        Log.i("TAG", ""+LeetCodePractise.majorityElement(new int[]{1}));
-        Log.i("TAG", ""+LeetCodePractise.maximumProduct(new int[]{-4,-3,-2,-1,60}));
-        Log.i("TAG", ""+LeetCodePractise.containsDuplicate(new int[]{1,2,2}));
+//        Log.i("TAG", ""+LeetCodePractise.maximumProduct(new int[]{-4,-3,-2,-1,60}));
+//        Log.i("TAG", ""+LeetCodePractise.containsDuplicate(new int[]{1,2,2}));
     }
 
     private class FingerPrintClick implements View.OnClickListener {
@@ -414,12 +417,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
         @Override
         public void onClick(View view) {
-            findViewById(R.id.confirmation_message).setVisibility(View.GONE);
-            findViewById(R.id.encrypted_message).setVisibility(View.GONE);
-
             // Set up the crypto object for later. The object will be authenticated by use
             // of the fingerprint.
-            if (CommonUtils.initCipher(mKeyStore,mCipher, mKeyName)) {
+            if (CommonUtils.initCipher(mKeyStore, mCipher, mKeyName)) {
 
                 // Show the fingerprint dialog. The user has the option to use the fingerprint with
                 // crypto, or you can fall back to using a server-side verified password.
@@ -429,7 +429,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
                 boolean useFingerprintPreference = mSharedPreferences
                         .getBoolean(getString(R.string.use_fingerprint_to_authenticate_key),
                                 true);
-                if (useFingerprintPreference) fragment.setStage(FingerprintAuthenticationDialogFragment.Stage.FINGERPRINT);
+                if (useFingerprintPreference)
+                    fragment.setStage(FingerprintAuthenticationDialogFragment.Stage.FINGERPRINT);
                 else fragment.setStage(FingerprintAuthenticationDialogFragment.Stage.PASSWORD);
                 fragment.show(getFragmentManager(), DIALOG_FRAGMENT_TAG);
             } else {
