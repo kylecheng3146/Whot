@@ -1,10 +1,13 @@
 package whot.what.hot.ui.main;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -109,11 +113,11 @@ public class MainActivity extends BaseActivity
         switch (item.getItemId()) {
             case R.id.nav_home:
                 break;
-            case R.id.nav_gallery:
+            case R.id.nav_hot:
                 break;
-            case R.id.nav_slideshow:
+            case R.id.nav_recent:
                 break;
-            case R.id.nav_manage:
+            case R.id.nav_setting:
                 break;
             case R.id.nav_share:
                 break;
@@ -164,9 +168,9 @@ public class MainActivity extends BaseActivity
         ImageView ivPicture = view.findViewById(R.id.iv_picture);
         TextView tvName = view.findViewById(R.id.tv_name);
 
-
         Bundle params = new Bundle();
         params.putString("fields", "id,email,gender,cover,picture.type(large)");
+        //讀取facebook profile image and id
         new GraphRequest(AccessToken.getCurrentAccessToken(), "me", params, HttpMethod.GET,
                 new GraphRequest.Callback() {
                     @Override
@@ -176,7 +180,15 @@ public class MainActivity extends BaseActivity
                                 JSONObject data = response.getJSONObject();
                                 if (data.has("picture")) {
                                     URL url = new URL(data.getJSONObject("picture").getJSONObject("data").getString("url"));
-                                    Glide.with(MainActivity.this).load(url).into(ivPicture);
+                                    //使用 glide 圓形圖示
+                                    Glide.with(mActivity).load(url).asBitmap().centerCrop().into(new BitmapImageViewTarget(ivPicture) {
+                                        @Override
+                                        protected void setResource(Bitmap resource) {
+                                            RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(mActivity.getResources(), resource);
+                                            circularBitmapDrawable.setCircular(true);
+                                            ivPicture.setImageDrawable(circularBitmapDrawable);
+                                        }
+                                    });
                                     tvName.setText(data.getString("id"));
                                 }
                             } catch (Exception e) {

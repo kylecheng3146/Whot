@@ -44,4 +44,5 @@
     <string name="use_password">Use password</string>
     <string name="ok">確認</string>
     <string name="purchase_done">Purchase successful</string>
+    <string name="main_map">附近</string>
 </resources>

@@ -6,19 +6,19 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/com_facebook_auth_dialog_header_background"
+            android:icon="@mipmap/ic_home"
             android:title="@string/main_home" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
+            android:id="@+id/nav_hot"
+            android:icon="@mipmap/ic_fire"
             android:title="@string/main_hot" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/main_tag" />
+            android:id="@+id/nav_recent"
+            android:icon="@mipmap/ic_map"
+            android:title="@string/main_map" />
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
+            android:id="@+id/nav_setting"
+            android:icon="@mipmap/ic_setting"
             android:title="@string/main_setting" />
     </group>
 
