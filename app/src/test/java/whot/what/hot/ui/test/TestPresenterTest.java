@@ -2,15 +2,21 @@ package whot.what.hot.ui.test;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
 import java.util.HashMap;
 
 import rx.Observable;
+import rx.Scheduler;
+import rx.android.plugins.RxAndroidPlugins;
+import rx.android.plugins.RxAndroidSchedulersHook;
+import rx.plugins.RxJavaPlugins;
+import rx.plugins.RxJavaSchedulersHook;
+import rx.schedulers.Schedulers;
 import whot.what.hot.api.ApiServices;
 import whot.what.hot.data.AntModel;
-import whot.what.hot.data.InstagramTagModel;
 import whot.what.hot.data.MainModel;
 
 import static org.mockito.Mockito.mock;
@@ -26,10 +32,31 @@ public class TestPresenterTest {
     private TestView testView;
     private ApiServices apiServices;
 
+    @BeforeClass
+    public static void openRxTools(){
+        RxAndroidSchedulersHook rxAndroidSchedulersHook = new RxAndroidSchedulersHook() {
+            @Override
+            public Scheduler getMainThreadScheduler() {
+                return Schedulers.immediate();
+            }
+        };
+
+        RxJavaSchedulersHook rxJavaSchedulersHook = new RxJavaSchedulersHook() {
+            @Override
+            public Scheduler getIOScheduler() {
+                return Schedulers.immediate();
+            }
+        };
+
+        // reset()不是必要，實踐中發現不寫reset()，偶爾會出錯，所以寫上保險
+        RxAndroidPlugins.getInstance().reset();
+        RxAndroidPlugins.getInstance().registerSchedulersHook(rxAndroidSchedulersHook);
+        RxJavaPlugins.getInstance().reset();
+        RxJavaPlugins.getInstance().registerSchedulersHook(rxJavaSchedulersHook);
+    }
+
     @Before
     public void setUp() throws Exception {
-        RxUnitTestTools.openRxTools();
-
         // 生成mock對象
         testView = mock(TestView.class);
         apiServices = mock(ApiServices.class);
@@ -69,19 +96,4 @@ public class TestPresenterTest {
         antModel = captor.getValue();
         Assert.assertEquals("Ant",antModel.getName());
     }
-
-    @Test
-    public void testInstagramResult() throws Exception {
-        InstagramTagModel instagram = new InstagramTagModel();
-        when(apiServices.getInstagramGson("v1/tags/tainan/media/recent?access_token=315272341.7fb3c50.8d63aaf6d07943238abac3a1b0866c16")).thenReturn(Observable.just(instagram));
-        testPresenter.loadInstagramData();
-
-        ArgumentCaptor<InstagramTagModel> captor = ArgumentCaptor.forClass(InstagramTagModel.class);
-
-        verify(testView).getInstagramResult(captor.capture());
-        instagram = captor.getValue();
-
-        Assert.assertEquals(200,instagram.getMeta().getCode());
-    }
-
 }
