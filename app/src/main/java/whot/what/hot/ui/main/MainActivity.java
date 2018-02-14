@@ -39,6 +39,8 @@ import butterknife.ButterKnife;
 import whot.what.hot.R;
 import whot.what.hot.base.BaseActivity;
 import whot.what.hot.data.InstagramTagModel;
+import whot.what.hot.ui.setting.SettingsActivity;
+import whot.what.hot.util.CommonUtils;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainView {
@@ -99,7 +101,7 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_about) {
+        if (id == R.id.action_suggestion) {
             return true;
         }
 
@@ -115,7 +117,7 @@ public class MainActivity extends BaseActivity
                 break;
             case R.id.nav_hot:
                 break;
-            case R.id.nav_recent:
+            case R.id.nav_nearby:
                 break;
             case R.id.nav_setting:
                 break;

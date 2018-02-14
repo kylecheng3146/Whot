@@ -13,13 +13,17 @@
             android:icon="@mipmap/ic_fire"
             android:title="@string/main_hot" />
         <item
-            android:id="@+id/nav_recent"
+            android:id="@+id/nav_nearby"
             android:icon="@mipmap/ic_map"
             android:title="@string/main_map" />
         <item
             android:id="@+id/nav_setting"
             android:icon="@mipmap/ic_setting"
             android:title="@string/main_setting" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@mipmap/ic_about"
+            android:title="@string/main_about" />
     </group>
 
     <item android:title="Communicate">

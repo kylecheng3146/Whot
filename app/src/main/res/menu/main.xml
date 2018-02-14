@@ -3,8 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_about"
+        android:id="@+id/action_suggestion"
         android:orderInCategory="100"
-        android:title="@string/action_about"
-        app:showAsAction="never" />
+        android:title="@string/action_suggestion" />
+    <item
+        android:id="@+id/action_score"
+        android:numericModifiers="META"
+        android:orderInCategory="100"
+        android:title="@string/action_score"
+        app:showAsAction="collapseActionView" />
 </menu>

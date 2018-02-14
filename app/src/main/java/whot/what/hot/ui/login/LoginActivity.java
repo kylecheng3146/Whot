@@ -16,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
@@ -61,6 +62,7 @@ import whot.what.hot.base.BaseActivity;
 import whot.what.hot.ui.main.MainActivity;
 import whot.what.hot.util.CommonUtils;
 import whot.what.hot.util.FingerprintAuthenticationDialogFragment;
+import whot.what.hot.util.LeetCodePractise;
 import whot.what.hot.util.SharedPreferenceUtils;
 
 /**
@@ -403,6 +405,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
 //        Log.i("TAG", ""+LeetCodePractise.majorityElement(new int[]{1}));
 //        Log.i("TAG", ""+LeetCodePractise.maximumProduct(new int[]{-4,-3,-2,-1,60}));
 //        Log.i("TAG", ""+LeetCodePractise.containsDuplicate(new int[]{1,2,2}));
+        Log.i("TAG", ""+ LeetCodePractise.toHex(100));
     }
 
     private class FingerPrintClick implements View.OnClickListener {

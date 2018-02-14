@@ -18,8 +18,6 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_about">About</string>
     <string name="title_activity_main">MainActivity</string>
     <!--facebook id , scheme-->
     <string name="facebook_app_id">862687143912512</string>
@@ -39,10 +37,13 @@
     <string name="fingerprint_not_recognized">辨識錯誤，請再嘗試一次</string>
     <string name="fingerprint_success">辨識成功</string>
     <string name="sign_in">登入</string>
-    <string name="use_fingerprint_to_authenticate_key" >use_fingerprint_to_authenticate_key</string>
+    <string name="use_fingerprint_to_authenticate_key">use_fingerprint_to_authenticate_key</string>
     <string name="cancel">取消</string>
     <string name="use_password">Use password</string>
     <string name="ok">確認</string>
     <string name="purchase_done">Purchase successful</string>
     <string name="main_map">附近</string>
+    <string name="action_suggestion">提出建議</string>
+    <string name="action_score">給個評分</string>
+    <string name="main_about">關於</string>
 </resources>
