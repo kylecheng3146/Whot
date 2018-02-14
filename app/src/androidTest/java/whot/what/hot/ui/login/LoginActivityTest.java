@@ -17,7 +17,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
-/**
+/** 登入畫面的 UI test，測試所有使用行為
  * Created by Kevin on 19/10/2017.
  */
 @RunWith(AndroidJUnit4.class)
@@ -40,9 +40,10 @@ public class LoginActivityTest {
         onView(withId(R.id.et_password))
                 .check(matches(withText("1234")));
 
-
+        //測試登入按鈕
         onView(withId(R.id.btn_login))
                 .perform(click());
+
     }
 
     @Test
