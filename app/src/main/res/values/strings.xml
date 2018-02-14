@@ -46,4 +46,5 @@
     <string name="action_suggestion">提出建議</string>
     <string name="action_score">給個評分</string>
     <string name="main_about">關於</string>
+    <string name="title_activity_near_by">NearBy</string>
 </resources>
