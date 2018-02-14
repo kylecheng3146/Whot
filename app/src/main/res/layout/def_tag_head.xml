@@ -23,7 +23,7 @@
             android:layout_weight="1"
             android:gravity="left|center"
             android:paddingLeft="10dp"
-            android:textColor="@color/common_plus_signin_btn_text_light_focused"
+            android:textColor="@color/colorAccent"
             android:textSize="20sp"
             android:textStyle="bold" />
 

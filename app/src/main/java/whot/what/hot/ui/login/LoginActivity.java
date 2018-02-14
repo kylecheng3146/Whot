@@ -6,7 +6,6 @@ import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.fingerprint.FingerprintManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -31,12 +30,9 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -45,7 +41,6 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.cert.CertificateException;
-import java.util.List;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -85,10 +80,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
     @BindView(R.id.login_button)
     LoginButton loginButton;
 
-    private LoginPresenter presenter;
     private LoginEntity loginEntity;
     private LoginDao loginDao;
-    CallbackManager callbackManager;
+    private CallbackManager callbackManager;
     private SharedPreferences mSharedPreferences;
     private static final String DIALOG_FRAGMENT_TAG = "myFragment";
     private static final String SECRET_MESSAGE = "Very secret message";
@@ -115,59 +109,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
         initFingerPrint();
         runLeetCode();
-        final AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "user.db").build();
-
-        /* 讀取Room資料庫的使用者電子郵件資料，
-         * 並且給AutoCompleteTextView使用*/
-        new AsyncTask<Void, Void, List<LoginEntity>>() {
-            @Override
-            protected List<LoginEntity> doInBackground(Void... params) {
-                return db.loginDao().fetchAllUsers();
-            }
-
-            @Override
-            protected void onPostExecute(List<LoginEntity> usersData) {
-                //判斷資資料是否存在後在寫入ArrayAdapter儲存
-                if (usersData.size() > 0) {
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(LoginActivity.this, android.R.layout.simple_dropdown_item_1line);
-                    for (LoginEntity value : usersData) {
-                        adapter.add(value.getEmail());
-                    }
-                    etMail.setThreshold(1);//will start working from first character
-                    etMail.setAdapter(adapter);//setting the adapter data into the
-                }
-            }
-        }.execute();
-
-
-        callbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email");
-        // Callback registration
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                final AccessToken accessToken = loginResult.getAccessToken();
-
-                GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(JSONObject user, GraphResponse graphResponse) {
-                        CommonUtils.intentActivity(LoginActivity.this, MainActivity.class);
-                    }
-                }).executeAsync();
-            }
-
-            @Override
-            public void onCancel() {
-                // App code
-            }
-
-            @Override
-            public void onError(FacebookException exception) {
-                // App code
-            }
-        });
+        //讀取sqlite儲存的帳戶資訊
+        LoginPresenter presenter = new LoginPresenter(this);
+        presenter.onLoadAccount();
     }
 
     @OnClick(R.id.btn_login)
@@ -221,7 +165,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
         //紀錄登入的電子郵件到SharedPreference後跳轉頁面到首頁
         SharedPreferenceUtils.setEmail(this, email);
         CommonUtils.intentActivity(this, MainActivity.class);
-//        presenter = new LoginPresenter(this);
     }
 
     @OnEditorAction(R.id.et_password)
@@ -232,6 +175,40 @@ public class LoginActivity extends BaseActivity implements LoginView {
             return true;
         }
         return false;
+    }
+
+    @OnClick(R.id.login_button)
+    @Override
+    public void onFacebookLoginClick() {
+
+        callbackManager = CallbackManager.Factory.create();
+        loginButton.setReadPermissions("email");
+        // Callback registration
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                final AccessToken accessToken = loginResult.getAccessToken();
+                GraphRequest.newMeRequest(accessToken, (user, graphResponse) -> CommonUtils.intentActivity(LoginActivity.this, MainActivity.class)).executeAsync();
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+            }
+        });
+    }
+
+    @Override
+    public void fetchAccount(ArrayAdapter<String> adapter) {
+        //will start working from first character
+        etMail.setThreshold(1);
+        //setting the adapter data into the
+        etMail.setAdapter(adapter);
     }
 
     @Override
@@ -314,9 +291,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
             Base64.encodeToString(encrypted, 0 /* flags */);
             CommonUtils.intentActivity(this, MainActivity.class);
         } catch (BadPaddingException | IllegalBlockSizeException e) {
-            Toast.makeText(this, "Failed to encrypt the data with the generated key. "
-                    + "Retry the purchase", Toast.LENGTH_LONG).show();
-//            Log.e(TAG, "Failed to encrypt the data with the generated key." + e.getMessage());
+            showMessage("Failed to encrypt the data with the generated key. Retry the purchase");
         }
     }
 
@@ -336,20 +311,14 @@ public class LoginActivity extends BaseActivity implements LoginView {
             throw new RuntimeException("Failed to get an instance of KeyGenerator", e);
         }
         Cipher defaultCipher;
-        Cipher cipherNotInvalidated;
         try {
             defaultCipher = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
-                    + KeyProperties.BLOCK_MODE_CBC + "/"
-                    + KeyProperties.ENCRYPTION_PADDING_PKCS7);
-            cipherNotInvalidated = Cipher.getInstance(KeyProperties.KEY_ALGORITHM_AES + "/"
                     + KeyProperties.BLOCK_MODE_CBC + "/"
                     + KeyProperties.ENCRYPTION_PADDING_PKCS7);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             throw new RuntimeException("Failed to get an instance of Cipher", e);
         }
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-
         KeyguardManager keyguardManager = getSystemService(KeyguardManager.class);
         FingerprintManager fingerprintManager = getSystemService(FingerprintManager.class);
         assert keyguardManager != null;
@@ -405,7 +374,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
 //        Log.i("TAG", ""+LeetCodePractise.majorityElement(new int[]{1}));
 //        Log.i("TAG", ""+LeetCodePractise.maximumProduct(new int[]{-4,-3,-2,-1,60}));
 //        Log.i("TAG", ""+LeetCodePractise.containsDuplicate(new int[]{1,2,2}));
-        Log.i("TAG", ""+ LeetCodePractise.toHex(100));
+        Log.i("TAG", "" + LeetCodePractise.toHex(100));
     }
 
     private class FingerPrintClick implements View.OnClickListener {

@@ -39,8 +39,6 @@ import butterknife.ButterKnife;
 import whot.what.hot.R;
 import whot.what.hot.base.BaseActivity;
 import whot.what.hot.data.InstagramTagModel;
-import whot.what.hot.ui.setting.SettingsActivity;
-import whot.what.hot.util.CommonUtils;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainView {
@@ -68,7 +66,6 @@ public class MainActivity extends BaseActivity
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
         navView.setNavigationItemSelectedListener(this);
 
         //讀取instagram tag 資訊
