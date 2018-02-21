@@ -46,6 +46,6 @@ public class MainActivityTest {
         //測試開啟action bar
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
         //測試關於的按鈕
-        onView(withText("About")).perform(click());
+        onView(withText("提出建議")).perform(click());
     }
 }
