@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">練習題</string>
+    <string name="app_name">WHOT</string>
     <string name="title_activity_login">Sign in</string>
     <!-- Strings related to login -->
     <string name="login_prompt_email">電子郵件</string>

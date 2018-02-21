@@ -86,7 +86,9 @@
                 android:layout_width="fill_parent"
                 android:layout_height="25dp"
                 android:layout_alignParentBottom="true"
-                android:layout_marginTop="50dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/button_style"
                 android:padding="2dp"
                 android:text="@string/login_sign_in"
@@ -97,9 +99,11 @@
                 android:id="@+id/login_button"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:textSize="14sp"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:layout_marginTop="10dp"
+                android:textSize="14sp"
                 facebook:com_facebook_login_text="使用Facebook登入" />
 
         </LinearLayout>
