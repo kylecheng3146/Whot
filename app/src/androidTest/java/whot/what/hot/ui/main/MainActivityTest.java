@@ -36,16 +36,22 @@ public class MainActivityTest {
         // 測試打開側邊欄
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
         //測試是否正確點擊成功
+        Thread.sleep(2000);
         onView(withId(R.id.drawer_layout)).check(matches(isOpen()));
         //測試關閉側邊欄
+        Thread.sleep(2000);
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.close());
         //測試是否關閉成功
+        Thread.sleep(2000);
         onView(withId(R.id.drawer_layout)).check(matches(isClosed()));
         //測試搜尋按鈕
+        Thread.sleep(2000);
         onView(withId(R.id.fab)).perform(click());
         //測試開啟action bar
+        Thread.sleep(2000);
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
         //測試關於的按鈕
+        Thread.sleep(2000);
         onView(withText("提出建議")).perform(click());
     }
 }

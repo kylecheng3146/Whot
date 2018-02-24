@@ -23,7 +23,7 @@ public class LoginActivityTest {
             LoginActivity.class);
 
     @Test
-    public void testLoginClick() {
+    public void testLoginClick() throws Exception {
         // Type text and then press the button.
 //        onView(withId(R.id.et_mail))
 //                .perform(typeText("123"), closeSoftKeyboard());
@@ -36,6 +36,7 @@ public class LoginActivityTest {
 //        onView(withId(R.id.et_password))
 //                .check(matches(withText("123456")));
 
+        Thread.sleep(2000);
         //測試登入按鈕
         onView(withId(R.id.btn_login))
                 .perform(click());
