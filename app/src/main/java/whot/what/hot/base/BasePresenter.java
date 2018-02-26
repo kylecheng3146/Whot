@@ -19,5 +19,6 @@ public class BasePresenter<V> {
 
     public void detachView() {
         this.mvpView = null;
+        RetrofitManager.removeService();
     }
 }

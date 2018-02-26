@@ -6,6 +6,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
+import java.util.HashMap;
+
 import rx.Observable;
 import rx.Scheduler;
 import rx.android.plugins.RxAndroidPlugins;
@@ -15,6 +17,8 @@ import rx.plugins.RxJavaSchedulersHook;
 import rx.schedulers.Schedulers;
 import whot.what.hot.api.ApiServices;
 import whot.what.hot.data.AntModel;
+import whot.what.hot.data.MainModel;
+import whot.what.hot.http.RetrofitManager;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -56,32 +60,32 @@ public class TestPresenterTest {
     public void setUp() throws Exception {
         // 生成mock對象
         testView = mock(TestView.class);
+        apiServices = RetrofitManager.getDefault("http://60.248.145.133:8164");
         apiServices = mock(ApiServices.class);
-
         testPresenter = new TestPresenter(apiServices, testView);
     }
 
-//    @Test
-//    public void testNotificationData() throws Exception {
-//        HashMap<String, String> hashMap = new HashMap<>();
-//        hashMap.put("IMEI", "355693063092533");
-//        hashMap.put("CusID", "0005967");
-//        hashMap.put("TimeStamp", "1497235728");
-//        hashMap.put("Signature", "ce42ccc9a6da004321c8f4dab7632c6b849245669634c155a9497afdc6fdfe11");
-//        hashMap.put("AppID", "20170518A");
-//
-//        MainModel mainModel = new MainModel();
-//
-//        when(apiServices.getNotificationCountWithRxJava("api/Android/NotifiListCount", hashMap)).thenReturn(Observable.just(mainModel));
-//        testPresenter.loadDataByRetrofitRxJava(hashMap);
-//
-//        ArgumentCaptor<MainModel> captor = ArgumentCaptor.forClass(MainModel.class);
-//
-//        verify(testView).getNotificationData(captor.capture());
-//        mainModel = captor.getValue();
-//
-//        Assert.assertEquals(true,mainModel.isResult());
-//    }
+    @Test
+    public void testNotificationData() throws Exception {
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("IMEI", "355693063092533");
+        hashMap.put("CusID", "0005967");
+        hashMap.put("TimeStamp", "1497235728");
+        hashMap.put("Signature", "ce42ccc9a6da004321c8f4dab7632c6b849245669634c155a9497afdc6fdfe11");
+        hashMap.put("AppID", "20170518A");
+
+        MainModel mainModel = new MainModel();
+
+        when(apiServices.getNotificationCountWithRxJava("api/Android/NotifiListCount", hashMap)).thenReturn(Observable.just(mainModel));
+        testPresenter.loadDataByRetrofitRxJava(hashMap);
+
+        ArgumentCaptor<MainModel> captor = ArgumentCaptor.forClass(MainModel.class);
+
+        verify(testView).getNotificationData(captor.capture());
+        mainModel = captor.getValue();
+
+        Assert.assertEquals(true,mainModel.isResult());
+    }
 
     @Test
     public void testAntResult() throws Exception {

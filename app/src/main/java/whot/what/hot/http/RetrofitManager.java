@@ -1,15 +1,13 @@
 package whot.what.hot.http;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import whot.what.hot.api.ApiServices;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import whot.what.hot.api.ApiServices;
 
 /**
  * 請求 retrofit 方法
@@ -27,13 +25,10 @@ public class RetrofitManager {
             OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
             httpClientBuilder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
             //對所有請求加上頭
-            httpClientBuilder.addInterceptor(new Interceptor() {
-                @Override
-                public okhttp3.Response intercept(Chain chain) throws IOException {
+            httpClientBuilder.addInterceptor(chain -> {
                     Request request = chain.request();
                     okhttp3.Response originalResponse = chain.proceed(request);
                     return originalResponse.newBuilder().header("key1", "value1").addHeader("key2", "value2").build();
-                }
             });
             SERVICE = new Retrofit.Builder()
                     .client(httpClientBuilder.build())
@@ -43,5 +38,13 @@ public class RetrofitManager {
                     .build().create(ApiServices.class);
         }
         return SERVICE;
+    }
+
+    /**
+     * 當執行過後清除service，
+     * 確保每次新增的service url可以一致或不一致
+     * */
+    public static void removeService(){
+        SERVICE = null;
     }
 }
