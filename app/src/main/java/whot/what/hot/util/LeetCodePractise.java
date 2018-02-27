@@ -14,12 +14,6 @@ import java.util.Set;
  */
 
 public class LeetCodePractise {
-    private static final String TAG = "LeetCodePractise";
-
-    private LeetCodePractise() {
-        // This utility class is not publicly instantiable
-    }
-
     /**
      * LeetCode 461 漢明距離
      * */

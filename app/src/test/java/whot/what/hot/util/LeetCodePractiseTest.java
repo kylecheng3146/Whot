@@ -72,6 +72,7 @@ public class LeetCodePractiseTest {
     @Test
     public void detectCapitalUse() throws Exception {
         Assert.assertEquals(true,LeetCodePractise.detectCapitalUse("USA"));
+        Assert.assertEquals(false,LeetCodePractise.detectCapitalUse("uSa"));
     }
 
     @Test
@@ -92,6 +93,10 @@ public class LeetCodePractiseTest {
 
     @Test
     public void findDisappearedNumbers() throws Exception {
+        List<Integer> expected = new ArrayList<>();
+        expected.add(5);
+        expected.add(6);
+        Assert.assertEquals(expected,LeetCodePractise.findDisappearedNumbers(new int[]{4,3,2,7,8,2,3,1}));
     }
 
     @Test
@@ -101,7 +106,8 @@ public class LeetCodePractiseTest {
 
     @Test
     public void isToeplitzMatrix() throws Exception {
-        Assert.assertEquals(false,LeetCodePractise.isToeplitzMatrix(new int[][]{ {11,74,0,93},{40,11,74,7}}));
+        Assert.assertEquals(false,LeetCodePractise.isToeplitzMatrix(new int[][]{{11,74,0,93},{40,11,74,7}}));
+        Assert.assertEquals(true,LeetCodePractise.isToeplitzMatrix(new int[][]{{1,2,3,4},{5,1,2,3},{9,5,1,2}}));
     }
 
     @Test
@@ -122,11 +128,15 @@ public class LeetCodePractiseTest {
     @Test
     public void missingNumber() throws Exception {
         Assert.assertEquals(8,LeetCodePractise.missingNumber(new int[]{9,6,4,2,3,5,7,0,1}));
+        Assert.assertEquals(0,LeetCodePractise.missingNumber(new int[]{9,6,4,2,3,5,7,8,1}));
     }
 
     @Test
     public void isAnagram() throws Exception {
         Assert.assertEquals(false,LeetCodePractise.isAnagram("rat","car"));
+        Assert.assertEquals(false,LeetCodePractise.isAnagram("rat","carasd"));
+        Assert.assertEquals(true,LeetCodePractise.isAnagram("",""));
+        Assert.assertEquals(true,LeetCodePractise.isAnagram("anagram","nagaram"));
     }
 
     @Test
@@ -137,11 +147,13 @@ public class LeetCodePractiseTest {
     @Test
     public void firstUniqChar() throws Exception {
         Assert.assertEquals(-1,LeetCodePractise.firstUniqChar("cc"));
+        Assert.assertEquals(0,LeetCodePractise.firstUniqChar("b"));
     }
 
     @Test
     public void majorityElement() throws Exception {
         Assert.assertEquals(1,LeetCodePractise.majorityElement(new int[]{1}));
+        Assert.assertEquals(0,LeetCodePractise.majorityElement(new int[]{1,2,3,4}));
     }
 
     @Test
@@ -152,10 +164,12 @@ public class LeetCodePractiseTest {
     @Test
     public void containsDuplicate() throws Exception {
         Assert.assertEquals(true,LeetCodePractise.containsDuplicate(new int[]{1,2,2}));
+        Assert.assertEquals(false,LeetCodePractise.containsDuplicate(new int[]{1,2}));
     }
 
     @Test
     public void toHex() throws Exception {
+        Assert.assertEquals("0",LeetCodePractise.toHex(0));
         Assert.assertEquals("64",LeetCodePractise.toHex(100));
     }
 
