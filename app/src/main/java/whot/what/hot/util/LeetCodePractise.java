@@ -153,7 +153,7 @@ public class LeetCodePractise {
      * 子序列是指從一個序列中刪除一些字符，剩餘字符順序保持不變得到的新序列。任何字符串都是其本身的子序列，空串不屬於任意字符串的子序列。
      * 返回最長不公共子序列，若不存在，返回-1。
      * */
-    public int findLUSlength(String a, String b) {
+    public static int findLUSlength(String a, String b) {
         /* 若兩字符串不相等，選擇較長的字符串返回長度即可。
          * 否則返回-1。 （若兩字符串相等，則任意字符串的子串均為另一個的子串*/
         return a.equals(b) ? -1 : Math.max(a.length(), b.length());
@@ -163,7 +163,7 @@ public class LeetCodePractise {
      * 283. Move Zeroes
      * nums = [0, 1, 0, 3, 12], after calling your function, nums should be [1, 3, 12, 0, 0].
      * */
-    public static void moveZeroes(int[] nums) {
+    public static int[] moveZeroes(int[] nums) {
 //        /*解法一，效率值比較低*/
 //        int nums_len = nums.length;
 //        int j = 0;
@@ -201,6 +201,7 @@ public class LeetCodePractise {
         while(index<nums.length){
             nums[index++]=0;
         }
+        return  nums;
     }
 
     /**
@@ -322,7 +323,7 @@ public class LeetCodePractise {
      * 258. Add Digits
      * Given num = 38, the process is like: 3 + 8 = 11, 1 + 1 = 2. Since 2 has only one digit, return it.
      * */
-    public int addDigits(int num) {
+    public static int addDigits(int num) {
         if(num ==0) return 0;
         return num % 9 ==0 ?9:num % 9;
     }
@@ -554,7 +555,7 @@ public class LeetCodePractise {
      s = "anagram", t = "nagaram", return true.
      s = "rat", t = "car", return false.
      * */
-    public boolean isAnagram(String s, String t) {
+    public static boolean isAnagram(String s, String t) {
         /*
         solution 1
         if(s.length() != t.length()) return false;
