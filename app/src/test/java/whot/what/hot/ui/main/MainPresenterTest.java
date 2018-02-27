@@ -69,6 +69,10 @@ public class MainPresenterTest {
         verify(mainView).fetchTagResult(captor.capture());
         instagram = captor.getValue();
         Assert.assertEquals(200,instagram.getMeta().getCode());
+        Assert.assertEquals(null,instagram.getData().get(0).getAttribution());
+        Assert.assertEquals("1717337832987387452_315272341",instagram.getData().get(0).getId());
+        Assert.assertEquals("https://www.instagram.com/p/BfVNakGjWY8/",instagram.getData().get(0).getLink());
+        Assert.assertEquals("next_max_id and min_id are deprecated for this endpoint; use min_tag_id and max_tag_id instead",instagram.getPagination().getDeprecation_warning());
     }
 
 }
