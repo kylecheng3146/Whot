@@ -62,7 +62,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".ui.nearby.NearByActivity"
+            android:name=".ui.nearby.NearByFragment"
             android:label="@string/title_activity_near_by" />
     </application>
 

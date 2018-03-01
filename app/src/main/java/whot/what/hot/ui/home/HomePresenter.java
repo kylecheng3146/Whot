@@ -1,4 +1,4 @@
-package whot.what.hot.ui.main;
+package whot.what.hot.ui.home;
 
 import whot.what.hot.api.ApiServices;
 import whot.what.hot.base.BasePresenter;
@@ -7,15 +7,15 @@ import whot.what.hot.http.RxManager;
 import whot.what.hot.http.RxSubscriber;
 
 /**
- * Created by Kevin on 2018/2/6.
+ * Created by Kevin on 2018/3/1.
  */
 
-class MainPresenter extends BasePresenter<MainView> {
-     MainPresenter(MainView view) {
+public class HomePresenter extends BasePresenter<HomeView> {
+    HomePresenter(HomeView view) {
         attachView(view);
     }
 
-     MainPresenter(ApiServices apiServices, MainView view) {
+    HomePresenter(ApiServices apiServices, HomeView view) {
         this.apiServices = apiServices;
         attachView(view);
     }

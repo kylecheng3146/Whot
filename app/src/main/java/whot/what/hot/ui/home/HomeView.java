@@ -1,12 +1,12 @@
-package whot.what.hot.ui.main;
+package whot.what.hot.ui.home;
 
 import whot.what.hot.base.BaseView;
 import whot.what.hot.data.InstagramTagModel;
 
 /**
- * Created by Kevin on 2018/2/6.
+ * Created by Kevin on 2018/3/1.
  */
 
-public interface MainView extends BaseView{
+public interface HomeView extends BaseView {
     void fetchTagResult(InstagramTagModel bean);
 }
