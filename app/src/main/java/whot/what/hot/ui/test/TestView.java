@@ -24,10 +24,7 @@ public interface TestView extends BaseView {
 
     void onRxJavaClick();
 
-    void onRetrofitPostClick();
-
     void onRetrofitCombineClick();
 
     void onRetrofitParameterClick();
-    void onInstagramClick();
 }

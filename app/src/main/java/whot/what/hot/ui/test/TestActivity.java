@@ -44,8 +44,6 @@ public class TestActivity extends BaseActivity implements TestView, View.OnClick
     @BindView(R.id.btn_retrofit_parameter)
     Button btnRetrofitParameter;
     @BindView(R.id.btn_retrofit_combine)
-    Button btnRetrofitCombine;
-    @BindView(R.id.btn_retrofit_post)
     Button btnRetrofitPost;
     @BindView(R.id.btn_retrofit_rxjava)
     Button btnRetrofitRxjava;
@@ -183,19 +181,6 @@ public class TestActivity extends BaseActivity implements TestView, View.OnClick
         hashMap.clear();
     }
 
-    @OnClick(R.id.btn_retrofit_post)
-    @Override
-    public void onRetrofitPostClick() {
-        hashMap.put("IMEI", "355693063092533");
-        hashMap.put("CusID", "0005967");
-        hashMap.put("TimeStamp", "1497235728");
-        hashMap.put("Signature", "ce42ccc9a6da004321c8f4dab7632c6b849245669634c155a9497afdc6fdfe11");
-        hashMap.put("AppID", "20170518A");
-        presenter = new TestPresenter(this);
-        presenter.loadDataByRetrofitPost(hashMap);
-        hashMap.clear();
-    }
-
     @OnClick(R.id.btn_retrofit_combine)
     @Override
     public void onRetrofitCombineClick() {
@@ -212,13 +197,6 @@ public class TestActivity extends BaseActivity implements TestView, View.OnClick
     public void onRetrofitParameterClick() {
         presenter = new TestPresenter(this);
         presenter.loadDataByRetrofitParameter();
-    }
-
-    @OnClick(R.id.btn_retrofit_instagram)
-    @Override
-    public void onInstagramClick() {
-        presenter = new TestPresenter(this);
-        presenter.loadInstagramData();
     }
 
     @Override

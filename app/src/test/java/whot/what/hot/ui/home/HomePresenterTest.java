@@ -1,4 +1,4 @@
-package whot.what.hot.ui.main;
+package whot.what.hot.ui.home;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,10 +23,10 @@ import static org.mockito.Mockito.when;
 /**
  * Created by Kevin on 2018/2/12.
  */
-public class MainPresenterTest {
+public class HomePresenterTest {
 
-    private MainPresenter mainPresenter;
-    private MainView mainView;
+    private HomePresenter homePresenter;
+    private HomeView homeView;
     private ApiServices apiServices;
 
     @BeforeClass
@@ -54,19 +54,18 @@ public class MainPresenterTest {
     @Before
     public void setUp() throws Exception {
         // 生成mock對象
-        mainView = mock(MainView.class);
+        homeView = mock(HomeView.class);
         apiServices = mock(ApiServices.class);
-
-        mainPresenter = new MainPresenter(apiServices, mainView);
+        homePresenter = new HomePresenter(apiServices, homeView);
     }
 
     @Test
     public void testTagResult() throws Exception {
         InstagramTagModel instagram = new InstagramTagModel();
         when(apiServices.getInstagramGson("v1/tags/tainan/media/recent?access_token=315272341.7fb3c50.8d63aaf6d07943238abac3a1b0866c16")).thenReturn(Observable.just(instagram));
-        mainPresenter.loadInstagramData();
+        homePresenter.loadInstagramData();
         ArgumentCaptor<InstagramTagModel> captor = ArgumentCaptor.forClass(InstagramTagModel.class);
-        verify(mainView).fetchTagResult(captor.capture());
+        verify(homeView).fetchTagResult(captor.capture());
         instagram = captor.getValue();
         Assert.assertEquals(200,instagram.getMeta().getCode());
         Assert.assertEquals(null,instagram.getData().get(0).getAttribution());

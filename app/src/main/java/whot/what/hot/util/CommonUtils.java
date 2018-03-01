@@ -45,10 +45,6 @@ public class CommonUtils {
 
     private static final String TAG = "CommonUtils";
 
-    private CommonUtils() {
-        // This utility class is not publicly instantiable
-    }
-
     /**
      * 載入訊息 loading 的 Dialog
      * @param context [頁面Context]

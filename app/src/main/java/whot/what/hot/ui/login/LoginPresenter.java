@@ -46,9 +46,9 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line);
                     for (LoginEntity value : usersData) adapter.add(value.getEmail());
                     mvpView.fetchAccount(adapter);
-                    mvpView.hideLoading();
                 }
             }
         }.execute();
+        mvpView.hideLoading();
     }
 }

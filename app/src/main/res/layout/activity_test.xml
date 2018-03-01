@@ -56,22 +56,6 @@
         android:text="Get參數拼接" />
 
     <Button
-        android:id="@+id/btn_retrofit_post"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_retrofit_combine"
-        android:layout_centerHorizontal="true"
-        android:text="POST" />
-
-    <Button
-        android:id="@+id/btn_retrofit_instagram"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_retrofit_rxjava"
-        android:layout_alignParentStart="true"
-        android:text="instagram" />
-
-    <Button
         android:id="@+id/btn_retrofit_rxjava"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
