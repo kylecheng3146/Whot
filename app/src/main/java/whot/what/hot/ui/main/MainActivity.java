@@ -6,8 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
@@ -24,7 +22,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 
 import org.json.JSONObject;
@@ -57,36 +54,24 @@ public class MainActivity extends BaseActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        if (savedInstanceState == null) {
-            Fragment fragment = null;
-            Class fragmentClass = null;
-            fragmentClass = HomeFragment.class;
-            try {
-                fragment = (Fragment) fragmentClass.newInstance();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.fl_content, fragment).commit();
-        }
+        if (savedInstanceState == null) translationFragment(HomeFragment.class);
+        //新增懸浮按鈕
         fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
+        //Action bar 加入 drawer layout
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         navView.setNavigationItemSelectedListener(this);
+        //初始化導覽抽屜的個人詳細資料圖示及文字訊息
         initNavHeaderView(navView.inflateHeaderView(R.layout.nav_header_main));
     }
 
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) drawerLayout.closeDrawer(GravityCompat.START);
+        else super.onBackPressed();
     }
 
     @Override
@@ -114,17 +99,15 @@ public class MainActivity extends BaseActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        Fragment fragment = null;
-        Class fragmentClass = null;
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_home:
-                fragmentClass = HomeFragment.class;
+                translationFragment(HomeFragment.class);
                 break;
             case R.id.nav_hot:
                 break;
             case R.id.nav_nearby:
-                fragmentClass = NearByFragment.class;
+                translationFragment(NearByFragment.class);
                 break;
             case R.id.nav_setting:
                 break;
@@ -134,15 +117,6 @@ public class MainActivity extends BaseActivity
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
-
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fl_content, fragment).commit();
-
         return true;
     }
 
@@ -153,33 +127,29 @@ public class MainActivity extends BaseActivity
     private void initNavHeaderView(View view){
         ImageView ivPicture = view.findViewById(R.id.iv_picture);
         TextView tvName = view.findViewById(R.id.tv_name);
-
         Bundle params = new Bundle();
         params.putString("fields", "id,email,gender,cover,picture.type(large)");
         //讀取facebook profile image and id
         new GraphRequest(AccessToken.getCurrentAccessToken(), "me", params, HttpMethod.GET,
-                new GraphRequest.Callback() {
-                    @Override
-                    public void onCompleted(GraphResponse response) {
-                        if (response != null) {
-                            try {
-                                JSONObject data = response.getJSONObject();
-                                if (data.has("picture")) {
-                                    URL url = new URL(data.getJSONObject("picture").getJSONObject("data").getString("url"));
-                                    //使用 glide 圓形圖示
-                                    Glide.with(mActivity).load(url).asBitmap().centerCrop().into(new BitmapImageViewTarget(ivPicture) {
-                                        @Override
-                                        protected void setResource(Bitmap resource) {
-                                            RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(mActivity.getResources(), resource);
-                                            circularBitmapDrawable.setCircular(true);
-                                            ivPicture.setImageDrawable(circularBitmapDrawable);
-                                        }
-                                    });
-                                    tvName.setText(data.getString("id"));
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                response -> {
+                    if (response != null) {
+                        try {
+                            JSONObject data = response.getJSONObject();
+                            if (data.has("picture")) {
+                                URL url = new URL(data.getJSONObject("picture").getJSONObject("data").getString("url"));
+                                //使用 glide 圓形圖示
+                                Glide.with(mActivity).load(url).asBitmap().centerCrop().into(new BitmapImageViewTarget(ivPicture) {
+                                    @Override
+                                    protected void setResource(Bitmap resource) {
+                                        RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(mActivity.getResources(), resource);
+                                        circularBitmapDrawable.setCircular(true);
+                                        ivPicture.setImageDrawable(circularBitmapDrawable);
+                                    }
+                                });
+                                tvName.setText(data.getString("id"));
                             }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                 }).executeAsync();

@@ -6,6 +6,8 @@ import android.app.ProgressDialog;
 import android.os.Handler;
 import android.support.annotation.LayoutRes;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -58,7 +60,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
             case android.R.id.home:
                 super.onBackPressed();//返回
                 return true;
@@ -116,5 +117,18 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
             }
         }
         return false;
+    }
+
+    /**
+     * fragment 轉換頁面
+     * @param c [Fragment class]
+     * */
+    protected void translationFragment(Class<?> c){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        try {
+            fragmentManager.beginTransaction().replace(R.id.fl_content, (Fragment) c.newInstance()).commit();
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }
