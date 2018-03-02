@@ -5,7 +5,7 @@ import android.os.Bundle;
 import whot.what.hot.R;
 import whot.what.hot.base.BaseActivity;
 
-public class SettingActivity extends BaseActivity {
+public class SettingFragment extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
