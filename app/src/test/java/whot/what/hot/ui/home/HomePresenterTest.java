@@ -70,8 +70,19 @@ public class HomePresenterTest {
         Assert.assertEquals(200,instagram.getMeta().getCode());
         Assert.assertEquals(null,instagram.getData().get(0).getAttribution());
         Assert.assertEquals("1717337832987387452_315272341",instagram.getData().get(0).getId());
+        Assert.assertNotEquals("1717337832987387452_315272341",instagram.getData().get(0).getCreated_time());
+        Assert.assertNotEquals(null,instagram.getData().get(0).getComments());
+        Assert.assertNotEquals(null,instagram.getData().get(0).getCaption());
+        Assert.assertEquals("Lo-fi",instagram.getData().get(0).getFilter());
+        Assert.assertEquals("image",instagram.getData().get(0).getType());
+        Assert.assertNotEquals(null,instagram.getData().get(0).getLikes());
+        Assert.assertEquals(0,instagram.getData().get(0).getUsers_in_photo().size());
+        Assert.assertNotEquals(null,instagram.getData().get(0).getUser());
+        Assert.assertNotEquals(null,instagram.getData().get(0).getTags());
         Assert.assertEquals("https://www.instagram.com/p/BfVNakGjWY8/",instagram.getData().get(0).getLink());
         Assert.assertEquals("next_max_id and min_id are deprecated for this endpoint; use min_tag_id and max_tag_id instead",instagram.getPagination().getDeprecation_warning());
+        Assert.assertNotEquals("AQCd4G7rM_tHGHqd-wLIXhsfg0Ek39iuPL5IwvswE95QDgyULexvURjqA-MAG_XmG5QSDH_yf0iH-1PcaRBiSO9FoPpjDsbhioKSS8WVFb1EaA",instagram.getPagination().getMin_tag_id());
+        Assert.assertNotEquals("AQCd4G7rM_tHGHqd-wLIXhsfg0Ek39iuPL5IwvswE95QDgyULexvURjqA-MAG_XmG5QSDH_yf0iH-1PcaRBiSO9FoPpjDsbhioKSS8WVFb1EaA",instagram.getPagination().getNext_min_id());
     }
 
 }
