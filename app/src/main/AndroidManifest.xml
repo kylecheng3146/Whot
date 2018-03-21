@@ -7,8 +7,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!--允許使用指紋辨識-->
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
-    <!--允許取得當前位置-->
+    <!--允許取得精細的正確位置-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!--允許取得當前位置-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use

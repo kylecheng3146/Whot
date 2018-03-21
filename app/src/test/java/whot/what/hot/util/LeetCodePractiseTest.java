@@ -173,4 +173,8 @@ public class LeetCodePractiseTest {
         Assert.assertEquals("64",LeetCodePractise.toHex(100));
     }
 
+    @Test
+    public void longestPalindrome() throws Exception{
+        Assert.assertEquals(3,LeetCodePractise.longestPalindrome("ccc"));
+    }
 }
